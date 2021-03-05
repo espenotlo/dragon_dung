@@ -1,23 +1,37 @@
 import backgrounds.BackgroundDataBase;
 import backgrounds.Background;
+import character.Attributes;
+import utilities.DiceRoller;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Random;
 
 public class CharacterCreator {
+    private final Attributes atr = new Attributes();
+    private final BackgroundDataBase backgrounds = new BackgroundDataBase();
+    private final DiceRoller r;
+    private final String[] attributes = {"Select attribute", "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"};
+    private final JComboBox<String> attribute1Box = new JComboBox<>(attributes);
+    private final JComboBox<String> attribute2Box = new JComboBox<>(attributes);
+    private final JComboBox<String> attribute3Box = new JComboBox<>(attributes);
+    private final JComboBox<String> attribute4Box = new JComboBox<>(attributes);
+    private final JComboBox<String> attribute5Box = new JComboBox<>(attributes);
+    private final JComboBox<String> attribute6Box = new JComboBox<>(attributes);
     public CharacterCreator() {
-
-        BackgroundDataBase backgrounds = new BackgroundDataBase();
+        this.r = new DiceRoller();
 
         JFrame frame = new JFrame("Character Creator");
         frame.setSize(600, 600);
         frame.setResizable(false);
 
-        JPanel mainPanel = (JPanel) frame.getContentPane();
-        mainPanel.setLayout(new BorderLayout());
+        JTabbedPane mainPanel = new JTabbedPane();
+        frame.getContentPane().add(mainPanel);
         mainPanel.setBackground(Color.lightGray);
         mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
@@ -137,7 +151,6 @@ public class CharacterCreator {
             }
         }
         backgroundSelect.setPreferredSize(dd);
-
         backgroundSelect.addActionListener(event -> {
             JComboBox<String> combo = (JComboBox<String>) event.getSource();
             try {
@@ -186,69 +199,231 @@ public class CharacterCreator {
         c.weightx = 1;
         raceClassBackgroundPanel.add(descriptionArea, c);
 
+        JLabel rollTypeLabel = new JLabel("Roll type: ");
         JCheckBox standardRollBox = new JCheckBox("4d6, keep 3");
+        standardRollBox.setSelected(true);
         JCheckBox hardRollBox = new JCheckBox("3d6");
-
-        String[] attributes = {"Strength", "Dexterity", "Consitution", "Intelligence", "Wisdom", "Charisma"};
-        JComboBox<String> attribute1Box = new JComboBox<>(attributes);
-        JComboBox<String> attribute2Box = new JComboBox<>(attributes);
-        JComboBox<String> attribute3Box = new JComboBox<>(attributes);
-        JComboBox<String> attribute4Box = new JComboBox<>(attributes);
-        JComboBox<String> attribute5Box = new JComboBox<>(attributes);
-        JComboBox<String> attribute6Box = new JComboBox<>(attributes);
-
-        JPanel rollAttributesPanel = new JPanel();
-        rollAttributesPanel.setLayout(new GridLayout(0,1));
-        rollAttributesPanel.add(standardRollBox);
-        rollAttributesPanel.add(hardRollBox);
+        standardRollBox.addActionListener(e -> {
+            hardRollBox.setSelected(!hardRollBox.isSelected());
+        });
 
         JTextArea attributeDescriptionArea = new JTextArea();
         attributeDescriptionArea.setEditable(false);
 
+        hardRollBox.addActionListener(e -> {
+            standardRollBox.setSelected(!hardRollBox.isSelected());
+        });
+
+
+        attribute1Box.addActionListener(event -> {
+            JComboBox<String> combo = (JComboBox<String>) event.getSource();
+            String selectedAttribute = (String) combo.getSelectedItem();
+            updateAttributeList(combo);
+            if (!selectedAttribute.equals("Select attribute")) {
+                attributeDescriptionArea.setText(atr.getAttribute(selectedAttribute).getDescription());
+            } else {
+                attributeDescriptionArea.setText("\n\n\n\n   Select an attribute.");
+            }
+        });
+        attribute2Box.addActionListener(event -> {
+            JComboBox<String> combo = (JComboBox<String>) event.getSource();
+            String selectedAttribute = (String) combo.getSelectedItem();
+            updateAttributeList(combo);
+            if (!selectedAttribute.equals("Select attribute")) {
+                attributeDescriptionArea.setText(atr.getAttribute(selectedAttribute).getDescription());
+            } else {
+                attributeDescriptionArea.setText("\n\n\n\n   Select an attribute.");
+            }
+        });
+        attribute3Box.addActionListener(event -> {
+            JComboBox<String> combo = (JComboBox<String>) event.getSource();
+            String selectedAttribute = (String) combo.getSelectedItem();
+            updateAttributeList(combo);
+            if (!selectedAttribute.equals("Select attribute")) {
+                attributeDescriptionArea.setText(atr.getAttribute(selectedAttribute).getDescription());
+            } else {
+                attributeDescriptionArea.setText("\n\n\n\n   Select an attribute.");
+            }
+        });
+        attribute4Box.addActionListener(event -> {
+            JComboBox<String> combo = (JComboBox<String>) event.getSource();
+            String selectedAttribute = (String) combo.getSelectedItem();
+            updateAttributeList(combo);
+            if (!selectedAttribute.equals("Select attribute")) {
+                attributeDescriptionArea.setText(atr.getAttribute(selectedAttribute).getDescription());
+            } else {
+                attributeDescriptionArea.setText("\n\n\n\n   Select an attribute.");
+            }
+        });
+        attribute5Box.addActionListener(event -> {
+            JComboBox<String> combo = (JComboBox<String>) event.getSource();
+            String selectedAttribute = (String) combo.getSelectedItem();
+            updateAttributeList(combo);
+            if (!selectedAttribute.equals("Select attribute")) {
+                attributeDescriptionArea.setText(atr.getAttribute(selectedAttribute).getDescription());
+            } else {
+                attributeDescriptionArea.setText("\n\n\n\n   Select an attribute.");
+            }
+        });
+        attribute6Box.addActionListener(event -> {
+            JComboBox<String> combo = (JComboBox<String>) event.getSource();
+            String selectedAttribute = (String) combo.getSelectedItem();
+            updateAttributeList(combo);
+            if (!selectedAttribute.equals("Select attribute")) {
+                attributeDescriptionArea.setText(atr.getAttribute(selectedAttribute).getDescription());
+            } else {
+                attributeDescriptionArea.setText("\n\n\n\n   Select an attribute.");
+            }
+        });
+
+        Dimension labelSize = new Dimension(100,50);
+        JLabel attribute1Label = new JLabel();
+        attribute1Label.setPreferredSize(labelSize);
+        attribute1Label.setBorder(new BevelBorder(BevelBorder.LOWERED));
+        JLabel attribute2Label = new JLabel();
+        attribute2Label.setPreferredSize(labelSize);
+        attribute2Label.setBorder(new BevelBorder(BevelBorder.LOWERED));
+        JLabel attribute3Label = new JLabel();
+        attribute3Label.setPreferredSize(labelSize);
+        attribute3Label.setBorder(new BevelBorder(BevelBorder.LOWERED));
+        JLabel attribute4Label = new JLabel();
+        attribute4Label.setPreferredSize(labelSize);
+        attribute4Label.setBorder(new BevelBorder(BevelBorder.LOWERED));
+        JLabel attribute5Label = new JLabel();
+        attribute5Label.setPreferredSize(labelSize);
+        attribute5Label.setBorder(new BevelBorder(BevelBorder.LOWERED));
+        JLabel attribute6Label = new JLabel();
+        attribute6Label.setPreferredSize(labelSize);
+        attribute6Label.setBorder(new BevelBorder(BevelBorder.LOWERED));
+
+        JButton attribute1RollButton = new JButton("Roll");
+        attribute1RollButton.addActionListener(e -> {
+            if (standardRollBox.isSelected()) {
+                attribute1Label.setText("" + this.r.roll("4d6k3"));
+            } else {
+                attribute1Label.setText("" + this.r.roll("3d6"));
+            }
+        });
+
+        JButton attribute2RollButton = new JButton("Roll");
+        attribute2RollButton.addActionListener(e -> {
+            if (standardRollBox.isSelected()) {
+                attribute2Label.setText("" + this.r.roll("4d6k3"));
+            } else {
+                attribute2Label.setText("" + this.r.roll("3d6"));
+            }
+        });
+
+        JButton attribute3RollButton = new JButton("Roll");
+        attribute3RollButton.addActionListener(e -> {
+            if (standardRollBox.isSelected()) {
+                attribute3Label.setText("" + this.r.roll("4d6k3"));
+            } else {
+                attribute3Label.setText("" + this.r.roll("3d6"));
+            }
+        });
+
+        JButton attribute4RollButton = new JButton("Roll");
+        attribute4RollButton.addActionListener(e -> {
+            if (standardRollBox.isSelected()) {
+                attribute4Label.setText("" + this.r.roll("4d6k3"));
+            } else {
+                attribute4Label.setText("" + this.r.roll("3d6"));
+            }
+        });
+
+        JButton attribute5RollButton = new JButton("Roll");
+        attribute5RollButton.addActionListener(e -> {
+            if (standardRollBox.isSelected()) {
+                attribute5Label.setText("" + this.r.roll("4d6k3"));
+            } else {
+                attribute5Label.setText("" + this.r.roll("3d6"));
+            }
+        });
+
+        JButton attribute6RollButton = new JButton("Roll");
+        attribute6RollButton.addActionListener(e -> {
+            if (standardRollBox.isSelected()) {
+                attribute6Label.setText("" + this.r.roll("4d6k3"));
+            } else {
+                attribute6Label.setText("" + this.r.roll("3d6"));
+            }
+        });
+
+        JPanel rollAttributesPanel = new JPanel();
+        rollAttributesPanel.setLayout(new GridLayout(0,3));
+        rollAttributesPanel.add(rollTypeLabel);
+        rollAttributesPanel.add(standardRollBox);
+        rollAttributesPanel.add(hardRollBox);
+        rollAttributesPanel.add(attribute1RollButton);
+        rollAttributesPanel.add(attribute1Label);
+        rollAttributesPanel.add(attribute1Box);
+        rollAttributesPanel.add(attribute2RollButton);
+        rollAttributesPanel.add(attribute2Label);
+        rollAttributesPanel.add(attribute2Box);
+        rollAttributesPanel.add(attribute3RollButton);
+        rollAttributesPanel.add(attribute3Label);
+        rollAttributesPanel.add(attribute3Box);
+        rollAttributesPanel.add(attribute4RollButton);
+        rollAttributesPanel.add(attribute4Label);
+        rollAttributesPanel.add(attribute4Box);
+        rollAttributesPanel.add(attribute5RollButton);
+        rollAttributesPanel.add(attribute5Label);
+        rollAttributesPanel.add(attribute5Box);
+        rollAttributesPanel.add(attribute6RollButton);
+        rollAttributesPanel.add(attribute6Label);
+        rollAttributesPanel.add(attribute6Box);
+
         JPanel attributesPanel = new JPanel();
-        attributesPanel.setLayout(new GridLayout(0,1));
+        attributesPanel.setLayout(new GridLayout(1,0));
         attributesPanel.add(rollAttributesPanel);
         attributesPanel.add(attributeDescriptionArea);
 
-        JButton nextButton = new JButton("Next");
-        nextButton.addActionListener(e -> {
-            if(isOnPage(mainPanel, raceClassBackgroundPanel)) {
-                mainPanel.remove(raceClassBackgroundPanel);
-                mainPanel.add(attributesPanel);
-            }
-            mainPanel.revalidate();
-        });
-        JButton backButton = new JButton("Back");
-        backButton.addActionListener(e -> {
-            if(isOnPage(mainPanel, attributesPanel)) {
-                mainPanel.remove(attributesPanel);
-                mainPanel.add(raceClassBackgroundPanel);
-            } else {
-                mainPanel.setBackground(Color.BLACK);
-            }
-            mainPanel.revalidate();
-        });
-
-        mainPanel.add(raceClassBackgroundPanel,BorderLayout.CENTER);
-        mainPanel.add(backButton, BorderLayout.PAGE_START);
-        mainPanel.add(nextButton, BorderLayout.PAGE_END);
-
-
+        mainPanel.addTab("Race, Class & Background",raceClassBackgroundPanel);
+        mainPanel.addTab("Attributes", attributesPanel);
 
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(d.width / 2 - frame.getWidth() / 2, d.height / 2 - frame.getHeight() / 2);
         frame.setVisible(true);
     }
-    private static boolean isOnPage(Container myContainer, JPanel myPanel) {
-        boolean isOnPage = false;
-        Component[] myComps = myContainer.getComponents();
-        for (Component myComp : myComps) {
-            if (myComp instanceof JPanel) {
-                if (myPanel == myComp) {
-                    isOnPage = true;
+    private void updateAttributeList(JComboBox<String> caller) {
+        ArrayList<JComboBox<String>> boxes = new ArrayList<>();
+        boxes.add(attribute1Box);
+        boxes.add(attribute2Box);
+        boxes.add(attribute3Box);
+        boxes.add(attribute4Box);
+        boxes.add(attribute5Box);
+        boxes.add(attribute6Box);
+        ArrayList<String> selectedItems = new ArrayList<>();
+        ArrayList<String> unSelectedItems = new ArrayList<>(Arrays.asList(attributes));
+        for (JComboBox<String> box : boxes) {
+            selectedItems.add((String) box.getSelectedItem());
+            unSelectedItems.remove((String) box.getSelectedItem());
+        }
+        for (JComboBox<String> box : boxes) {
+            ArrayList<String> containedInBox = new ArrayList<>();
+            int size = box.getItemCount();
+            for (int i = 0; i < size; i++) {
+                containedInBox.add(box.getItemAt(i));
+            }
+            for (String selectedItem : selectedItems) {
+                if (!selectedItem.equals(box.getSelectedItem())) {
+                    box.removeItem(selectedItem);
                 }
             }
+            for (String unSelectedItem : unSelectedItems) {
+                if (!containedInBox.contains(unSelectedItem)) {
+                    box.addItem(unSelectedItem);
+                    containedInBox.add(unSelectedItem);
+                }
+            }
+            if (!containedInBox.contains("Select attribute")) {
+                box.addItem("Select attribute");
+            }
         }
-        return isOnPage;
+    }
+    private String getAttributeDescription(String attribute) {
+
+        return "Hi!";
     }
 }
