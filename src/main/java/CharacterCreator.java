@@ -4,6 +4,7 @@ import backgrounds.Background;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class CharacterCreator {
@@ -174,21 +175,61 @@ public class CharacterCreator {
         inputPanel.add(backgroundLabel);
         inputPanel.add(backgroundSelect);
 
-        JPanel secondaryPanel = new JPanel();
-        secondaryPanel.setLayout(new GridBagLayout());
-        secondaryPanel.setBackground(Color.lightGray);
+        JPanel raceClassBackgroundPanel = new JPanel();
+        raceClassBackgroundPanel.setLayout(new GridBagLayout());
+        raceClassBackgroundPanel.setBackground(Color.lightGray);
         GridBagConstraints c = new GridBagConstraints();
         c.weightx = 1;
-        secondaryPanel.add(inputPanel, c);
+        raceClassBackgroundPanel.add(inputPanel, c);
         c.weightx = 0;
-        secondaryPanel.add(Box.createHorizontalStrut(10), c);
+        raceClassBackgroundPanel.add(Box.createHorizontalStrut(10), c);
         c.weightx = 1;
-        secondaryPanel.add(descriptionArea, c);
+        raceClassBackgroundPanel.add(descriptionArea, c);
+
+        JCheckBox standardRollBox = new JCheckBox("4d6, keep 3");
+        JCheckBox hardRollBox = new JCheckBox("3d6");
+
+        String[] attributes = {"Strength", "Dexterity", "Consitution", "Intelligence", "Wisdom", "Charisma"};
+        JComboBox<String> attribute1Box = new JComboBox<>(attributes);
+        JComboBox<String> attribute2Box = new JComboBox<>(attributes);
+        JComboBox<String> attribute3Box = new JComboBox<>(attributes);
+        JComboBox<String> attribute4Box = new JComboBox<>(attributes);
+        JComboBox<String> attribute5Box = new JComboBox<>(attributes);
+        JComboBox<String> attribute6Box = new JComboBox<>(attributes);
+
+        JPanel rollAttributesPanel = new JPanel();
+        rollAttributesPanel.setLayout(new GridLayout(0,1));
+        rollAttributesPanel.add(standardRollBox);
+        rollAttributesPanel.add(hardRollBox);
+
+        JTextArea attributeDescriptionArea = new JTextArea();
+        attributeDescriptionArea.setEditable(false);
+
+        JPanel attributesPanel = new JPanel();
+        attributesPanel.setLayout(new GridLayout(0,1));
+        attributesPanel.add(rollAttributesPanel);
+        attributesPanel.add(attributeDescriptionArea);
 
         JButton nextButton = new JButton("Next");
+        nextButton.addActionListener(e -> {
+            if(isOnPage(mainPanel, raceClassBackgroundPanel)) {
+                mainPanel.remove(raceClassBackgroundPanel);
+                mainPanel.add(attributesPanel);
+            }
+            mainPanel.revalidate();
+        });
         JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> {
+            if(isOnPage(mainPanel, attributesPanel)) {
+                mainPanel.remove(attributesPanel);
+                mainPanel.add(raceClassBackgroundPanel);
+            } else {
+                mainPanel.setBackground(Color.BLACK);
+            }
+            mainPanel.revalidate();
+        });
 
-        mainPanel.add(secondaryPanel,BorderLayout.CENTER);
+        mainPanel.add(raceClassBackgroundPanel,BorderLayout.CENTER);
         mainPanel.add(backButton, BorderLayout.PAGE_START);
         mainPanel.add(nextButton, BorderLayout.PAGE_END);
 
@@ -197,5 +238,17 @@ public class CharacterCreator {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(d.width / 2 - frame.getWidth() / 2, d.height / 2 - frame.getHeight() / 2);
         frame.setVisible(true);
+    }
+    private static boolean isOnPage(Container myContainer, JPanel myPanel) {
+        boolean isOnPage = false;
+        Component[] myComps = myContainer.getComponents();
+        for (Component myComp : myComps) {
+            if (myComp instanceof JPanel) {
+                if (myPanel == myComp) {
+                    isOnPage = true;
+                }
+            }
+        }
+        return isOnPage;
     }
 }
