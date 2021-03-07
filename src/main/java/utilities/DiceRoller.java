@@ -5,10 +5,8 @@ import java.util.Collections;
 import java.util.Random;
 
 public class DiceRoller {
-    private Random r;
 
     public DiceRoller() {
-        this.r = new Random();
     }
     public int roll(String die) {
         int diceRoll = 0;

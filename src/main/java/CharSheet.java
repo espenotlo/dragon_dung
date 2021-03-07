@@ -6,6 +6,7 @@ import java.awt.*;
 
 public class CharSheet {
     public static void main(String[] args) {
+        character.Character character = new character.Character();
 
         JFrame frame = new JFrame();
         frame.setSize(600,600);

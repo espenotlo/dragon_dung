@@ -1,7 +1,6 @@
 package backgrounds;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class BackgroundDataBase {
     private final ArrayList<Background> backgrounds;

@@ -10,7 +10,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Random;
 
 public class CharacterCreator {
     private final Attributes atr = new Attributes();
@@ -23,6 +22,7 @@ public class CharacterCreator {
     private final JComboBox<String> attribute4Box = new JComboBox<>(attributes);
     private final JComboBox<String> attribute5Box = new JComboBox<>(attributes);
     private final JComboBox<String> attribute6Box = new JComboBox<>(attributes);
+    private final JTextArea attributeDescriptionArea = new JTextArea();
     public CharacterCreator() {
         this.r = new DiceRoller();
 
@@ -54,10 +54,8 @@ public class CharacterCreator {
         subRaceSelect.setPreferredSize(dd);
 
         raceSelect.addActionListener(event -> {
-            JComboBox<String> combo = (JComboBox<String>) event.getSource();
-            String selectedRace = (String) combo.getSelectedItem();
 
-            switch (Objects.requireNonNull(selectedRace)) {
+            switch (Objects.requireNonNull((String) raceSelect.getSelectedItem())) {
                 case "Elf" -> {
                     subRaceSelect.removeAllItems();
                     subRaceSelect.addItem("Subrace");
@@ -92,8 +90,7 @@ public class CharacterCreator {
         subClassSelect.setPreferredSize(dd);
 
         classSelect.addActionListener(event -> {
-            JComboBox<String> combo = (JComboBox<String>) event.getSource();
-            String selectedClass = (String) combo.getSelectedItem();
+            String selectedClass = (String) classSelect.getSelectedItem();
 
             switch (Objects.requireNonNull(selectedClass)) {
                 case "Cleric" -> {
@@ -144,6 +141,7 @@ public class CharacterCreator {
                 }
             }
         });
+
         JComboBox<String> backgroundSelect = new JComboBox<>(new String[]{"Select Background"});
         for (Background background : backgrounds.getBackgrounds()) {
             if (!background.getName().equals("Select Background")) {
@@ -152,12 +150,14 @@ public class CharacterCreator {
         }
         backgroundSelect.setPreferredSize(dd);
         backgroundSelect.addActionListener(event -> {
-            JComboBox<String> combo = (JComboBox<String>) event.getSource();
             try {
-                String selectedBackground = (String) combo.getSelectedItem();
-                descriptionArea.setText(backgrounds.getBackground(selectedBackground).getName() + ":\n" + backgrounds.getBackground(selectedBackground).getDescription() + "\n\n" + backgrounds.getBackground(selectedBackground).getFeature()[0] + ":\n" + backgrounds.getBackground(selectedBackground).getFeature()[1]);
+                String b = (String) backgroundSelect.getSelectedItem();
+                descriptionArea.setText(backgrounds.getBackground(b).getName()
+                        + ":\n" + backgrounds.getBackground(b).getDescription()
+                        + "\n\n" + backgrounds.getBackground(b).getFeature()[0]
+                        + ":\n" + backgrounds.getBackground(b).getFeature()[1]);
             } catch (NullPointerException e) {
-                System.out.println("No background selected.");
+                descriptionArea.setText("No background selected.");
             }
         });
 
@@ -203,78 +203,17 @@ public class CharacterCreator {
         JCheckBox standardRollBox = new JCheckBox("4d6, keep 3");
         standardRollBox.setSelected(true);
         JCheckBox hardRollBox = new JCheckBox("3d6");
-        standardRollBox.addActionListener(e -> {
-            hardRollBox.setSelected(!hardRollBox.isSelected());
-        });
+        standardRollBox.addActionListener(e -> hardRollBox.setSelected(!hardRollBox.isSelected()));
+        hardRollBox.addActionListener(e -> standardRollBox.setSelected(!hardRollBox.isSelected()));
 
-        JTextArea attributeDescriptionArea = new JTextArea();
         attributeDescriptionArea.setEditable(false);
 
-        hardRollBox.addActionListener(e -> {
-            standardRollBox.setSelected(!hardRollBox.isSelected());
-        });
-
-
-        attribute1Box.addActionListener(event -> {
-            JComboBox<String> combo = (JComboBox<String>) event.getSource();
-            String selectedAttribute = (String) combo.getSelectedItem();
-            updateAttributeList(combo);
-            if (!selectedAttribute.equals("Select attribute")) {
-                attributeDescriptionArea.setText(atr.getAttribute(selectedAttribute).getDescription());
-            } else {
-                attributeDescriptionArea.setText("\n\n\n\n   Select an attribute.");
-            }
-        });
-        attribute2Box.addActionListener(event -> {
-            JComboBox<String> combo = (JComboBox<String>) event.getSource();
-            String selectedAttribute = (String) combo.getSelectedItem();
-            updateAttributeList(combo);
-            if (!selectedAttribute.equals("Select attribute")) {
-                attributeDescriptionArea.setText(atr.getAttribute(selectedAttribute).getDescription());
-            } else {
-                attributeDescriptionArea.setText("\n\n\n\n   Select an attribute.");
-            }
-        });
-        attribute3Box.addActionListener(event -> {
-            JComboBox<String> combo = (JComboBox<String>) event.getSource();
-            String selectedAttribute = (String) combo.getSelectedItem();
-            updateAttributeList(combo);
-            if (!selectedAttribute.equals("Select attribute")) {
-                attributeDescriptionArea.setText(atr.getAttribute(selectedAttribute).getDescription());
-            } else {
-                attributeDescriptionArea.setText("\n\n\n\n   Select an attribute.");
-            }
-        });
-        attribute4Box.addActionListener(event -> {
-            JComboBox<String> combo = (JComboBox<String>) event.getSource();
-            String selectedAttribute = (String) combo.getSelectedItem();
-            updateAttributeList(combo);
-            if (!selectedAttribute.equals("Select attribute")) {
-                attributeDescriptionArea.setText(atr.getAttribute(selectedAttribute).getDescription());
-            } else {
-                attributeDescriptionArea.setText("\n\n\n\n   Select an attribute.");
-            }
-        });
-        attribute5Box.addActionListener(event -> {
-            JComboBox<String> combo = (JComboBox<String>) event.getSource();
-            String selectedAttribute = (String) combo.getSelectedItem();
-            updateAttributeList(combo);
-            if (!selectedAttribute.equals("Select attribute")) {
-                attributeDescriptionArea.setText(atr.getAttribute(selectedAttribute).getDescription());
-            } else {
-                attributeDescriptionArea.setText("\n\n\n\n   Select an attribute.");
-            }
-        });
-        attribute6Box.addActionListener(event -> {
-            JComboBox<String> combo = (JComboBox<String>) event.getSource();
-            String selectedAttribute = (String) combo.getSelectedItem();
-            updateAttributeList(combo);
-            if (!selectedAttribute.equals("Select attribute")) {
-                attributeDescriptionArea.setText(atr.getAttribute(selectedAttribute).getDescription());
-            } else {
-                attributeDescriptionArea.setText("\n\n\n\n   Select an attribute.");
-            }
-        });
+        attribute1Box.addActionListener(event -> showAttributeDescription(attribute1Box));
+        attribute2Box.addActionListener(event -> showAttributeDescription(attribute2Box));
+        attribute3Box.addActionListener(event -> showAttributeDescription(attribute3Box));
+        attribute4Box.addActionListener(event -> showAttributeDescription(attribute4Box));
+        attribute5Box.addActionListener(event -> showAttributeDescription(attribute5Box));
+        attribute6Box.addActionListener(event -> showAttributeDescription(attribute6Box));
 
         Dimension labelSize = new Dimension(100,50);
         JLabel attribute1Label = new JLabel();
@@ -386,7 +325,7 @@ public class CharacterCreator {
         frame.setLocation(d.width / 2 - frame.getWidth() / 2, d.height / 2 - frame.getHeight() / 2);
         frame.setVisible(true);
     }
-    private void updateAttributeList(JComboBox<String> caller) {
+    private void updateAttributeList() {
         ArrayList<JComboBox<String>> boxes = new ArrayList<>();
         boxes.add(attribute1Box);
         boxes.add(attribute2Box);
@@ -422,8 +361,13 @@ public class CharacterCreator {
             }
         }
     }
-    private String getAttributeDescription(String attribute) {
-
-        return "Hi!";
+    private void showAttributeDescription(JComboBox<String> combo) {
+        String selectedAttribute = (String) combo.getSelectedItem();
+        updateAttributeList();
+        if (!Objects.equals(selectedAttribute, "Select attribute")) {
+            attributeDescriptionArea.setText(atr.getAttribute(selectedAttribute).getDescription());
+        } else {
+            this.attributeDescriptionArea.setText("\n\n\n\n Select an attribute.");
+        }
     }
 }

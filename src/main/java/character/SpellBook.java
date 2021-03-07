@@ -4,53 +4,54 @@ import spells.Spell;
 import spells.SpellDataBase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class SpellBook {
     private final SpellDataBase spellDataBase;
-    private ArrayList<Spell> availableSpells;
-    private ArrayList<Spell> spellBook;
-    private ArrayList<Spell> preparedSpells;
+    private final HashMap<String, Spell> availableSpells;
+    private final HashMap<String, Spell> spellBook;
+    private final HashMap<String, Spell> preparedSpells;
 
     public SpellBook(String className, String subClass) {
         this.spellDataBase = new SpellDataBase();
         this.availableSpells = getAvailableSpells(className, subClass);
-        this.spellBook = new ArrayList<>();
-        this.preparedSpells = new ArrayList<>();
+        this.spellBook = new HashMap<>();
+        this.preparedSpells = new HashMap<>();
     }
     public SpellBook(String className) {
         this.spellDataBase = new SpellDataBase();
         this.availableSpells = getAvailableSpells(className);
-        this.spellBook = new ArrayList<>();
-        this.preparedSpells = new ArrayList<>();
+        this.spellBook = new HashMap<>();
+        this.preparedSpells = new HashMap<>();
     }
-    public ArrayList<Spell> getAvailableSpells(String className, String subClass) {
-        ArrayList <Spell> returnSpells = new ArrayList<>();
+    public HashMap<String, Spell> getAvailableSpells(String className, String subClass) {
+        HashMap <String, Spell> returnSpells = new HashMap<>();
         for (Spell spell : spellDataBase.getSpells()) {
             if (spell.getClasses().contains(className) || spell.getClasses().contains(subClass)) {
-                returnSpells.add(spell);
+                returnSpells.put(spell.getName(), spell);
             }
         }
         return returnSpells;
     }
-    public ArrayList<Spell> getAvailableSpells(String className) {
-        ArrayList <Spell> returnSpells = new ArrayList<>();
+    public HashMap<String, Spell> getAvailableSpells(String className) {
+        HashMap <String, Spell> returnSpells = new HashMap<>();
         for (Spell spell : spellDataBase.getSpells()) {
             if (spell.getClasses().contains(className)) {
-                returnSpells.add(spell);
+                returnSpells.put(spell.getName(), spell);
             }
         }
         return returnSpells;
     }
     public void addSpell(String spellName) {
         boolean searching = true;
-        Iterator<Spell> it = availableSpells.iterator();
+        Iterator<Spell> it = availableSpells.values().iterator();
         while (it.hasNext() && searching) {
             Spell spell = it.next();
             if (spell.getName().equals(spellName)) {
-                spellBook.add(spell);
+                spellBook.put(spell.getName(), spell);
                 if (spell.getLevel() == 0) {
-                    preparedSpells.add(spell);
+                    preparedSpells.put(spell.getName(), spell);
                     searching = false;
                 }
             }
@@ -70,7 +71,7 @@ public class SpellBook {
         }
     }
     public void removeSpell(String spellName) {
-        Iterator<Spell> it = spellBook.iterator();
+        Iterator<Spell> it = spellBook.values().iterator();
         boolean searching = true;
         while (it.hasNext() && searching) {
             Spell spell = it.next();
@@ -87,7 +88,7 @@ public class SpellBook {
     public Spell searchSpellBook(String name) {
         Spell returnSpell = null;
         boolean searching = true;
-        Iterator<Spell> it = spellBook.iterator();
+        Iterator<Spell> it = spellBook.values().iterator();
         while (it.hasNext() && searching) {
             Spell i = it.next();
             if (i.getName().equals(name)) {
@@ -97,24 +98,15 @@ public class SpellBook {
         }
         return returnSpell;
     }
-    public ArrayList<Spell> getSpellBook() {
+    public HashMap<String, Spell> getSpellBook() {
         return this.spellBook;
     }
 
     public SpellDataBase getSpellDataBase() {
         return spellDataBase;
     }
-    public Spell searchPreparedSpells(String name) {
-        Spell returnSpell = null;
-        boolean searching = true;
-        Iterator<Spell> it = spellBook.iterator();
-        while (it.hasNext() && searching) {
-            Spell i = it.next();
-            if (i.getName().equals(name)) {
-                returnSpell = i;
-                searching = false;
-            }
-        }
-        return returnSpell;
+
+    public HashMap<String, Spell> getPreparedSpells() {
+        return this.preparedSpells;
     }
 }

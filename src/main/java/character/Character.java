@@ -28,6 +28,23 @@ public class Character {
     private int tempHp;
     private int proficiencyBonus;
 
+    public Character() {
+        this.name = "Democrates";
+        this.baseClass = new ClassDataBase().getClass("Fighter");
+        this.race = new RaceLibrary().getRace("Human");
+        this.background = new BackgroundDataBase().getBackground("Outlander");
+        this.attributes = new Attributes(16, 13, 14, 10, 10, 12);
+        this.feats = new Feats();
+        this.inv = new Inventory();
+        this.proficiencies = new Proficiencies();
+        updateMaxHp();
+        this.currentHp = this.maxHp;
+        this.tempHp = 0;
+        this.spellBook = new SpellBook(this.baseClass.getName());
+        updateProfBonus();
+        updateAc();
+    }
+
     public Character(String name, String baseClass, String race, String background
             , int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma) {
         this.name = name;
@@ -133,7 +150,7 @@ public class Character {
         return total;
     }
     public int spellDamage(String spellName) {
-        Spell spell = this.spellBook.searchPreparedSpells(spellName);
+        Spell spell = this.spellBook.getPreparedSpells().get(spellName);
         Random r = new Random();
         int diceRoll = 0;
         int i = 0;
@@ -211,8 +228,10 @@ public class Character {
         if (this.race.getRaceName().equals("Hill Dwarf")) {
             newHp += this.baseClass.getLevel();
         }
-        if (this.baseClass.getSubClass().equals("Draconic Bloodline")) {
-            newHp += this.baseClass.getLevel();
+        if (null == this.baseClass.getSubClass()) {} else {
+            if (this.baseClass.getSubClass().equals("Draconic Bloodline")) {
+                newHp += this.baseClass.getLevel();
+            }
         }
         if (feats.hasFeat("Tough")) {
             newHp += this.baseClass.getLevel() * 2;

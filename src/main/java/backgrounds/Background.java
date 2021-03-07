@@ -1,8 +1,5 @@
 package backgrounds;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class Background {
     private final String name;
     private final String description;
