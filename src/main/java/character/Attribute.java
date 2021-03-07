@@ -40,6 +40,14 @@ public class Attribute {
         return this.mod;
     }
 
+    public String getModAsString() {
+        if (this.mod >= 0) {
+            return "+" + this.mod;
+        } else {
+            return "" + this.mod;
+        }
+    }
+
     public void setValue(int value) {
         this.value = value;
         updateMod();

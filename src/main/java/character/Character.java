@@ -12,6 +12,8 @@ import spells.Spell;
 import java.util.Iterator;
 import java.util.Random;
 
+import static java.lang.Math.*;
+
 public class Character {
     private final String name;
     private final BaseClass baseClass;
@@ -22,18 +24,23 @@ public class Character {
     private final Inventory inv;
     private final Proficiencies proficiencies;
     private final SpellBook spellBook;
+    private final Skills skills;
     private int ac;
     private int maxHp;
     private int currentHp;
     private int tempHp;
     private int proficiencyBonus;
+    private int currentHitDice;
+    private int deathSaveFailures;
+    private int deathSaveSuccesses;
+    private int level;
 
     public Character() {
         this.name = "Democrates";
         this.baseClass = new ClassDataBase().getClass("Fighter");
         this.race = new RaceLibrary().getRace("Human");
         this.background = new BackgroundDataBase().getBackground("Outlander");
-        this.attributes = new Attributes(16, 13, 14, 10, 10, 12);
+        this.attributes = new Attributes(16, 13, 14, 8, 10, 12);
         this.feats = new Feats();
         this.inv = new Inventory();
         this.proficiencies = new Proficiencies();
@@ -41,6 +48,9 @@ public class Character {
         this.currentHp = this.maxHp;
         this.tempHp = 0;
         this.spellBook = new SpellBook(this.baseClass.getName());
+        this.skills = new Skills();
+        this.level = 1;
+        this.currentHitDice = this.level;
         updateProfBonus();
         updateAc();
     }
@@ -58,6 +68,9 @@ public class Character {
         this.currentHp = this.maxHp;
         this.tempHp = 0;
         this.spellBook = new SpellBook(this.baseClass.getName(), this.baseClass.getSubClass());
+        this.skills = new Skills();
+        this.level = 1;
+        this.currentHitDice = this.level;
         updateProfBonus();
         updateAc();
         updateMaxHp();
@@ -95,30 +108,99 @@ public class Character {
             }
         }
     }
+
     public String getName() {
         return name;
     }
+
     public BaseClass getBaseClass() {
         return baseClass;
     }
+
     public Race getRace() {
         return race;
     }
+
+    public int getLevel() {
+        return this.level;
+    }
+
+    public int getCurrentHitDice() {
+        return this.currentHitDice;
+    }
+
+    public void spendHitDie() {
+        if (this.currentHitDice > 0) {
+            this.currentHitDice --;
+            heal(roll("1d" + (this.getBaseClass().getHpDice() + this.attributes.getMod("Constitution"))));
+        }
+    }
+
     public Attributes getAttributes() {
         return attributes;
     }
+
+    public String getSavingThrowAsString(String attribute) {
+        int returnInt;
+        if (this.proficiencies.getSavingThrows().contains(attribute)) {
+            returnInt = this.attributes.getMod(attribute) + this.proficiencyBonus;
+        }
+        else {
+            returnInt = this.attributes.getMod(attribute);
+        }
+        if (returnInt >= 0) {
+            return "+" + returnInt;
+        } else {
+            return "" + returnInt;
+        }
+    }
+
+    public int getSkillMod(String skill) {
+        int skillMod = 0;
+        for (String s : this.proficiencies.getSkills()) {
+            if (s.equals(skill)) {
+                skillMod += this.proficiencyBonus;
+            }
+        }
+        skillMod += this.attributes.getMod(this.skills.getAttribute(skill));
+        return skillMod;
+    }
+
+    public String getSkillModAsString(String skill) {
+        int skillMod = 0;
+        for (String s : this.proficiencies.getSkills()) {
+            if (s.equals(skill)) {
+                skillMod += this.proficiencyBonus;
+            }
+        }
+        skillMod += this.attributes.getMod(this.skills.getAttribute(skill));
+        if (skillMod >= 0) {
+            return "+" + skillMod;
+        } else {
+            return "" + skillMod;
+        }
+    }
+
     public int getAc() {
         return ac;
     }
+
     public int getMaxHp() {
         return maxHp;
     }
+
     public int getCurrentHp() {
         return currentHp;
     }
+
+    public int getTempHp() {
+        return tempHp;
+    }
+
     private int getCastingMod() {
         return attributes.getMod(this.baseClass.getCastingStat());
     }
+
     public void damage(int damage) {
         int dmg = damage;
         while (dmg > 0 && tempHp > 0 ) {
@@ -130,15 +212,58 @@ public class Character {
             dmg--;
         }
     }
+
     public void heal(int healing) {
         currentHp += healing;
         if (currentHp > maxHp) {
             currentHp = maxHp;
         }
     }
+
     public void longRest() {
         currentHp = maxHp;
+        if (this.currentHitDice < this.level) {
+            this.currentHitDice += round(this.level/2f);
+            if (this.currentHitDice > this.level) {
+                this.currentHitDice = this.level;
+            }
+        }
+        tempHp = 0;
+        deathSaveSuccesses = 0;
+        deathSaveFailures = 0;
     }
+
+    public void deathSave() {
+        int save = roll("1d20");
+        if (save >= 10) {
+            if (save == 20) {
+                deathSaveSuccesses = 3;
+            } else {
+                deathSaveSuccesses = min((deathSaveSuccesses + 1), 3);
+            }
+        } else if (save == 1) {
+            deathSaveFailures = min((deathSaveFailures + 2), 3);
+        } else {
+            deathSaveFailures = min((deathSaveFailures + 1), 3);
+        }
+    }
+
+    public int skillCheck(String skill) {
+        return roll("1d20") + getSkillMod(skill);
+    }
+
+    public boolean isDead() {
+        return this.deathSaveFailures >= 3;
+    }
+
+    public int getDeathSaveFailures() {
+        return this.deathSaveFailures;
+    }
+
+    public int getDeathSaveSuccesses() {
+        return this.deathSaveSuccesses;
+    }
+
     public int spellAttack() {
         Random r = new Random();
         int diceRoll = r.nextInt(20) + 1;
@@ -149,6 +274,7 @@ public class Character {
         System.out.println("for a total of: " + total + " to hit.");
         return total;
     }
+
     public int spellDamage(String spellName) {
         Spell spell = this.spellBook.getPreparedSpells().get(spellName);
         Random r = new Random();
@@ -164,6 +290,7 @@ public class Character {
         }
         return diceRoll + bonuses;
     }
+
     public int weaponAttack(String weaponName) {
         Random r = new Random();
         int diceRoll = r.nextInt(20) + 1;
@@ -188,6 +315,7 @@ public class Character {
         System.out.println("plus modifiers of " + statMod);
         return diceRoll + this.proficiencyBonus + statMod;
     }
+
     public int weaponDamage(String weaponName) {
         Item weapon = this.inv.searchEquipped(weaponName);
         int diceRoll = roll(weapon.getNumberOfDice()+"d"+weapon.getBonus());
@@ -201,6 +329,7 @@ public class Character {
         }
         return diceRoll + statMod;
     }
+
     public int versatileWeaponDamage(String weaponName) {
         Item weapon = this.inv.searchEquipped(weaponName);
         int diceRoll = roll(weapon.getNumberOfDice()+"d"+weapon.getVersatileDamage());
@@ -214,10 +343,12 @@ public class Character {
         }
         return diceRoll + statMod;
     }
+
     public int offHandDamage(String weaponName) {
         Item weapon = this.inv.searchInv(weaponName);
         return roll(weapon.getNumberOfDice()+"d"+weapon.getBonus());
     }
+
     private void updateMaxHp() {
         int newHp = this.baseClass.getHpDice() + this.attributes.getMod("Constitution");
         int i = 1;
@@ -228,7 +359,7 @@ public class Character {
         if (this.race.getRaceName().equals("Hill Dwarf")) {
             newHp += this.baseClass.getLevel();
         }
-        if (null == this.baseClass.getSubClass()) {} else {
+        if (null != this.baseClass.getSubClass()) {
             if (this.baseClass.getSubClass().equals("Draconic Bloodline")) {
                 newHp += this.baseClass.getLevel();
             }
@@ -238,6 +369,7 @@ public class Character {
         }
         this.maxHp = newHp;
     }
+
     public int roll(String die) {
         int diceRoll = 0;
         int number = 1;
@@ -261,6 +393,7 @@ public class Character {
     public Background getBackground() {
         return background;
     }
+
     private void updateProfBonus() {
         int level = this.baseClass.getLevel();
         int profBonus = 6;
@@ -275,6 +408,7 @@ public class Character {
         }
         this.proficiencyBonus = profBonus;
     }
+
     public void equipItem(String name) {
         this.inv.equipItem(name);
         Item i = this.inv.searchEquipped(name);
@@ -282,11 +416,17 @@ public class Character {
             updateAc();
         }
     }
+
     public void unEquip(String name) {
         Item i = this.inv.searchEquipped(name);
         this.inv.unEquipItem(name);
         if (i.getType() < 8 && i.getType() > 3) {
             updateAc();
         }
+    }
+
+    public void resetDeathSaves() {
+        this.deathSaveSuccesses = 0;
+        this.deathSaveFailures = 0;
     }
 }

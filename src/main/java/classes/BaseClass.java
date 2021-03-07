@@ -1,8 +1,9 @@
 package classes;
 
+import character.Proficiencies;
+
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 public class BaseClass {
     private final String name;
@@ -10,47 +11,21 @@ public class BaseClass {
     private int level;
     private final int hpDice;
     private final int unarmoredDefense;
-    private final HashMap<String, String> features;
-    private final HashMap<String, String> subClassFeatures;
+    private final HashMap<String, String> classFeatures;
+    private HashMap<String, String> subClassFeatures;
+    private final Proficiencies proficiencies;
 
-    public BaseClass(String className) {
+    public BaseClass(String className, String subClass, int hpDice, int unarmoredDefense, HashMap<String, String> classFeatures, HashMap<String, String> subClassFeatures, Proficiencies proficiencies) {
         this.name = className;
-        this.hpDice = getHp(className);
-        this.unarmoredDefense = getUA(className);
-        this.features = new HashMap<>();
-        this.subClassFeatures = new HashMap<>();
-        this.subClass = null;
-        this.level = 1;
-    }
-    public BaseClass(String className, String subClass) {
-        this.name = className;
-        this.hpDice = getHp(className);
-        this.unarmoredDefense = getUA(className);
-        this.features = new HashMap<>();
-        this.subClassFeatures = new HashMap<>();
+        this.hpDice = hpDice;
+        this.unarmoredDefense = unarmoredDefense;
+        this.classFeatures = classFeatures;
+        this.subClassFeatures = subClassFeatures;
         this.subClass = subClass;
         this.level = 1;
+        this.proficiencies = proficiencies;
     }
-    private int getUA(String className) {
-        int UA = 0;
-        if (className.equals("Barbarian")) {
-            UA = 1;
-        } else if (className.equals("Monk")) {
-            UA = 2;
-        }
-        return UA;
-    }
-    private int getHp(String className) {
-        int hp = 8;
-        if (className.equals("Barbarian")) {
-            hp = 12;
-        } else if ("Blood Hunter, Fighter, Paladin, Ranger".contains(className)) {
-            hp = 10;
-        } else if ("Sorcerer, Wizard".contains(className)) {
-            hp = 6;
-        }
-        return hp;
-    }
+
     public String getName() {
         return this.name;
     }
@@ -79,38 +54,55 @@ public class BaseClass {
         return returnString;
     }
 
-    public HashMap<String, String> getFeatures() {
-        return features;
+    public HashMap<String, String> getClassFeatures() {
+        return this.classFeatures;
     }
-    public boolean hasFeature(String name) {
+
+    public HashMap<String, String> getSubClassFeatures() {
+        return this.subClassFeatures;
+    }
+
+    public boolean hasClassFeature(String name) {
         boolean hasFeature = false;
-        Iterator<Map.Entry<String,String>> it = features.entrySet().iterator();
+        Iterator<String> it = classFeatures.keySet().iterator();
         while (it.hasNext() && !hasFeature) {
-            Map.Entry<String, String> feature = it.next();
-            if (feature.getKey().equals(name)) {
+            String feature = it.next();
+            if (feature.equals(name)) {
                 hasFeature = true;
             }
         }
         return hasFeature;
     }
+
     public boolean hasSubClassFeature(String name) {
         boolean hasFeature = false;
-        Iterator<Map.Entry<String, String>> it = subClassFeatures.entrySet().iterator();
+        Iterator<String> it = subClassFeatures.keySet().iterator();
         while (it.hasNext() && !hasFeature) {
-            Map.Entry<String,String> feature = it.next();
-            if (feature.getKey().equals(name)) {
+            String feature = it.next();
+            if (feature.equals(name)) {
                 hasFeature = true;
             }
         }
         return hasFeature;
     }
+
     public String getSubClass() {
         return subClass;
     }
-    public void setSubClass(String subClass) {
+
+    public void setSubClass(String subClass, HashMap<String, String> subClassFeatures) {
         this.subClass = subClass;
+        this.subClassFeatures = subClassFeatures;
     }
+
+    public Proficiencies getProficiencies() {
+        return this.proficiencies;
+    }
+
     public int getLevel() {
         return level;
+    }
+    public void increaseLevel() {
+        this.level ++;
     }
 }

@@ -12,7 +12,7 @@ public class Attributes {
     private final Attribute charisma;
 
     public Attributes() {
-        this.strength = new Attribute ("Strength", 10, "   Strength\n" +
+        this.strength = new Attribute ("Strength", 10, "\n\n\n\n\n   Strength\n" +
                 "   Measures\n" +
                 "   Natural athleticism, bodily power\n" +
                 "\n" +
@@ -24,7 +24,7 @@ public class Attributes {
                 "   Dragonborn (+2)\n" +
                 "   Half-orc (+2)\n" +
                 "   Human (+1)");
-        this.dexterity = new Attribute ("Dexterity", 10, "   Dexterity\n" +
+        this.dexterity = new Attribute ("Dexterity", 10, "\n\n\n\n\n   Dexterity\n" +
                 "   Measures\n" +
                 "   Physical agility, reflexes, balance, poise\n" +
                 "\n" +
@@ -36,7 +36,7 @@ public class Attributes {
                 "   Halfling (+2)\n" +
                 "   Forest gnome (+1)\n" +
                 "   Human (+1)");
-        this.constitution = new Attribute ("Constitution", 10,"   Constitution\n" +
+        this.constitution = new Attribute ("Constitution", 10,"\n\n\n\n\n   Constitution\n" +
                 "   Measures\n" +
                 "   Health, stamina, vital force\n" +
                 "\n" +
@@ -44,12 +44,12 @@ public class Attributes {
                 "   Everyone\n" +
                 "\n" +
                 "   Racial Increases\n" +
-                "   Dwarf (+2), " +
+                "   Dwarf (+2)\n" +
                 "   Stout halfling (+1)\n" +
                 "   Rock gnome (+1)\n" +
                 "   Half-orc (+1)\n" +
                 "   Human (+1)");
-        this.intelligence = new Attribute ("Intelligence", 10,"   Intelligence\n" +
+        this.intelligence = new Attribute ("Intelligence", 10,"\n\n\n\n\n   Intelligence\n" +
                 "   Measures\n" +
                 "   Mental acuity, information recall, analytical skill\n" +
                 "\n" +
@@ -61,7 +61,7 @@ public class Attributes {
                 "   Gnome (+2)\n" +
                 "   Tiefling (+1)\n" +
                 "   Human (+1)");
-        this.wisdom = new Attribute ("Wisdom", 10,"   Wisdom\n" +
+        this.wisdom = new Attribute ("Wisdom", 10,"\n\n\n\n\n   Wisdom\n" +
                 "   Measures\n" +
                 "   Awareness, intuition, insight\n" +
                 "\n" +
@@ -70,9 +70,9 @@ public class Attributes {
                 "\n" +
                 "   Racial Increases\n" +
                 "   Hill dwarf (+1)\n" +
-                "Wood elf (+1)\n" +
-                "Human (+1)");
-        this.charisma = new Attribute ("Charisma", 10, "   Charisma\n" +
+                "   Wood elf (+1)\n" +
+                "   Human (+1)");
+        this.charisma = new Attribute ("Charisma", 10, "\n\n\n\n\n   Charisma\n" +
                 "   Measures\n" +
                 "   Confidence, eloquence, leadership\n" +
                 "\n" +
@@ -89,7 +89,7 @@ public class Attributes {
     }
 
     public Attributes(int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma) {
-        this.strength = new Attribute("Strength", strength,"\n\n\n\nStrength\n" +
+        this.strength = new Attribute("Strength", strength,"Strength\n" +
                 "Measures\n" +
                 "Natural athleticism, bodily power\n" +
                 "\n" +
@@ -97,7 +97,10 @@ public class Attributes {
                 "Barbarian, fighter, paladin\n" +
                 "\n" +
                 "Racial Increases\n" +
-                "Mountain dwarf (+2), Dragonborn (+2), Half-orc (+2), Human (+1)");
+                "Mountain dwarf (+2)\n" +
+                "Dragonborn (+2)\n" +
+                "Half-orc (+2)\n" +
+                "Human (+1)");
         this.dexterity = new Attribute("Dexterity", dexterity,"\n\n\n\nDexterity\n" +
                 "Measures\n" +
                 "Physical agility, reflexes, balance, poise\n" +
@@ -106,7 +109,10 @@ public class Attributes {
                 "Monk, ranger, rogue\n" +
                 "\n" +
                 "Racial Increases\n" +
-                "Elf (+2), Halfling (+2), Forest gnome (+1), Human (+1)\n");
+                "Elf (+2)\n" +
+                "Halfling (+2)\n" +
+                "Forest gnome (+1)\n" +
+                "Human (+1)\n");
         this.constitution = new Attribute("Constitution", constitution,"\n\n\n\nConstitution\n" +
                 "Measures\n" +
                 "Health, stamina, vital force\n" +
@@ -115,7 +121,11 @@ public class Attributes {
                 "Everyone\n" +
                 "\n" +
                 "Racial Increases\n" +
-                "Dwarf (+2), Stout halfling (+1), Rock gnome (+1), Half-orc (+1), Human (+1)");
+                "Dwarf (+2)\n" +
+                "Stout halfling (+1)\n" +
+                "Rock gnome (+1)\n" +
+                "Half-orc (+1)\n" +
+                "Human (+1)");
         this.intelligence = new Attribute("Intelligence", intelligence,"\n\n\n\nIntelligence\n" +
                 "Measures\n" +
                 "Mental acuity, information recall, analytical skill\n" +
@@ -124,7 +134,10 @@ public class Attributes {
                 "Wizard\n" +
                 "\n" +
                 "Racial Increases\n" +
-                "High elf (+1), Gnome (+2), Tiefling (+1), Human (+1)");
+                "High elf (+1)\n" +
+                "Gnome (+2)\n" +
+                "Tiefling (+1)\n" +
+                "Human (+1)");
         this.wisdom = new Attribute("Wisdom", wisdom,"\n\n\n\nWisdom\n" +
                 "Measures\n" +
                 "Awareness, intuition, insight\n" +
@@ -133,7 +146,9 @@ public class Attributes {
                 "Cleric, druid\n" +
                 "\n" +
                 "Racial Increases\n" +
-                "Hill dwarf (+1), Wood elf (+1), Human (+1)");
+                "Hill dwarf (+1)\n" +
+                "Wood elf (+1)\n" +
+                "Human (+1)");
         this.charisma = new Attribute("Charisma", charisma,"\n\n\n\nCharisma\n" +
                 "Measures\n" +
                 "Confidence, eloquence, leadership\n" +
@@ -142,7 +157,12 @@ public class Attributes {
                 "Bard, sorcerer, warlock\n" +
                 "\n" +
                 "Racial Increases\n" +
-                "Half-elf (+2), Drow (+1), Lightfoot halfling (+1), Dragonborn (+1), Tiefling (+2), Human (+1)");
+                "Half-elf (+2)\n" +
+                "Drow (+1)\n" +
+                "Lightfoot halfling (+1)\n" +
+                "Dragonborn (+1)\n" +
+                "Tiefling (+2)\n" +
+                "Human (+1)");
     }
 
     public Attribute getAttribute(String name) {

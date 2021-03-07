@@ -1,26 +1,36 @@
 package classes;
 
+import character.Proficiencies;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ClassDataBase {
-    private ArrayList<BaseClass> classes;
+    private final ArrayList<BaseClass> classes;
 
     public ClassDataBase() {
         classes = new ArrayList<>();
-        classes.add(new BaseClass("Artificer"));
-        classes.add(new BaseClass("Barbarian"));
-        classes.add(new BaseClass("Bard"));
-        classes.add(new BaseClass("Blood Hunter"));
-        classes.add(new BaseClass("Cleric"));
-        classes.add(new BaseClass("Druid"));
-        classes.add(new BaseClass("Fighter"));
-        classes.add(new BaseClass("Monk"));
-        classes.add(new BaseClass("Paladin"));
-        classes.add(new BaseClass("Ranger"));
-        classes.add(new BaseClass("Rogue"));
-        classes.add(new BaseClass("Sorcerer"));
-        classes.add(new BaseClass("Warlock"));
-        classes.add(new BaseClass("Wizard"));
+        HashMap<String, String> classFeatures = new HashMap<>();
+        classFeatures.put("something", "something");
+        HashMap<String, String> subClassFeatures = new HashMap<>();
+        subClassFeatures.put("something", "something");
+        Proficiencies proficiencies = new Proficiencies();
+        proficiencies.addSaveProf("Strength");
+        proficiencies.addSaveProf("Constitution");
+        classes.add(new BaseClass("Artificer", null, 8, 0, classFeatures, subClassFeatures, proficiencies));
+        classes.add(new BaseClass("Barbarian", null, 12, 1, classFeatures, subClassFeatures, proficiencies));
+        classes.add(new BaseClass("Bard", null, 8, 0, classFeatures, subClassFeatures, proficiencies));
+        classes.add(new BaseClass("Blood Hunter", null, 10, 0, classFeatures, subClassFeatures, proficiencies));
+        classes.add(new BaseClass("Cleric", "Divine Domain", 8, 0, classFeatures, subClassFeatures, proficiencies));
+        classes.add(new BaseClass("Druid", null, 8, 0, classFeatures, subClassFeatures, proficiencies));
+        classes.add(new BaseClass("Fighter", null, 10, 0, classFeatures, subClassFeatures, proficiencies));
+        classes.add(new BaseClass("Monk", null, 8, 2, classFeatures, subClassFeatures, proficiencies));
+        classes.add(new BaseClass("Paladin", null, 10, 0, classFeatures, subClassFeatures, proficiencies));
+        classes.add(new BaseClass("Ranger", null, 10, 0, classFeatures, subClassFeatures, proficiencies));
+        classes.add(new BaseClass("Rogue", null, 8, 0, classFeatures, subClassFeatures, proficiencies));
+        classes.add(new BaseClass("Sorcerer", "Sorcerous Origin", 6, 0, classFeatures, subClassFeatures, proficiencies));
+        classes.add(new BaseClass("Warlock", "Otherworldly Patron", 8, 0, classFeatures, subClassFeatures, proficiencies));
+        classes.add(new BaseClass("Wizard", null, 6, 0, classFeatures, subClassFeatures, proficiencies));
     }
     public BaseClass getClass(String name) {
         BaseClass returnBaseClass = null;

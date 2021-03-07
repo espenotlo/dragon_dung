@@ -1,12 +1,66 @@
+import character.Character;
+
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 
-public class CharSheet {
-    public static void main(String[] args) {
-        character.Character character = new character.Character();
+public class CharacterSheet {
+    private CharacterCreator characterCreator;
+    private character.Character character = new character.Character();
+    private final JLabel nameLabel = new JLabel(character.getName());
+    private final JLabel classLabel = new JLabel(character.getBaseClass().getName());
+    private final JLabel raceLabel = new JLabel(character.getRace().getSubRace());
+    private final JLabel strengthScoreLabel = new JLabel();
+    private final JButton strengthModButton = new JButton();
+    private final JLabel dexterityScoreLabel = new JLabel();
+    private final JButton dexterityModButton = new JButton();
+    private final JLabel constitutionScoreLabel = new JLabel();
+    private final JButton constitutionModButton = new JButton();
+    private final JLabel intelligenceScoreLabel = new JLabel();
+    private final JButton intelligenceModButton = new JButton();
+    private final JLabel wisdomScoreLabel = new JLabel();
+    private final JButton wisdomModButton = new JButton();
+    private final JLabel charismaScoreLabel = new JLabel();
+    private final JButton charismaModButton = new JButton();
+    private final JButton strengthSaveButton = new JButton();
+    private final JButton dexteritySaveButton = new JButton();
+    private final JButton constitutionSaveButton = new JButton();
+    private final JButton intelligenceSaveButton = new JButton();
+    private final JButton wisdomSaveButton = new JButton();
+    private final JButton charismaSaveButton = new JButton();
+    private final JButton acrobaticsButton = new JButton();
+    private final JButton animalHandlingButton = new JButton();
+    private final JButton arcanaButton = new JButton();
+    private final JButton athleticsButton = new JButton();
+    private final JButton deceptionButton = new JButton();
+    private final JButton historyButton = new JButton();
+    private final JButton insightButton = new JButton();
+    private final JButton intimidationButton = new JButton();
+    private final JButton investigationButton = new JButton();
+    private final JButton medicineButton = new JButton();
+    private final JButton natureButton = new JButton();
+    private final JButton perceptionButton = new JButton();
+    private final JButton performanceButton = new JButton();
+    private final JButton persuasionButton = new JButton();
+    private final JButton religionButton = new JButton();
+    private final JButton sleightOfHandButton = new JButton();
+    private final JButton stealthButton = new JButton();
+    private final JButton survivalButton = new JButton();
+    private final JLabel hitPointsLabel = new JLabel();
+    private final JLabel temporaryHitPointsLabel = new JLabel();
+    private final JLabel hitDiceLabel = new JLabel();
+    private final JCheckBox firstSuccess = new JCheckBox();
+    private final JCheckBox secondSuccess = new JCheckBox();
+    private final JCheckBox thirdSuccess = new JCheckBox();
+    private final JCheckBox firstFailure = new JCheckBox();
+    private final JCheckBox secondFailure = new JCheckBox();
+    private final JCheckBox thirdFailure = new JCheckBox();
+    private final JLabel armorClassLabel = new JLabel();
+    private final JLabel initiativeLabel = new JLabel();
+
+    public CharacterSheet() {
 
         JFrame frame = new JFrame();
         frame.setSize(600,600);
@@ -16,17 +70,21 @@ public class CharSheet {
         frame.setJMenuBar(menuBar);
 
         JMenuItem newCharacter = new JMenuItem("New Character");
-        newCharacter.addActionListener(e -> new CharacterCreator());
-
+        newCharacter.addActionListener(e -> {
+            this.characterCreator = new CharacterCreator(this);
+        });
 
         JMenuItem selectCharacter = new JMenuItem("Select Character..");
 
-
         JMenuItem deleteCharacter = new JMenuItem("Delete Character..");
+
+        JMenuItem importCharacter = new JMenuItem(("Import from creator"));
+        importCharacter.addActionListener(e -> getCharacterFromCreator());
 
         menuBar.add(newCharacter);
         menuBar.add(selectCharacter);
         menuBar.add(deleteCharacter);
+        menuBar.add(importCharacter);
 
         JPanel mainPanel = (JPanel) frame.getContentPane();
         mainPanel.setBorder(new EmptyBorder(10,10,10,10));
@@ -40,15 +98,12 @@ public class CharSheet {
         characterInfoPanel.setBackground(Color.WHITE);
         characterInfoPanel.setLayout(new GridBagLayout());
 
-        JLabel nameLabel = new JLabel("Here goes the character's name");
         nameLabel.setFont(new Font("nameFont", Font.PLAIN, 20));
         nameLabel.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED), "<html><u>Name:</u></html>", TitledBorder.CENTER, TitledBorder.BELOW_TOP));
 
-        JLabel classLabel = new JLabel("Beastmaster");
         classLabel.setFont(new Font("nameFont", Font.PLAIN, 20));
         classLabel.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED), "<html><u>Class:</u></html>", TitledBorder.CENTER, TitledBorder.BELOW_TOP));
 
-        JLabel raceLabel = new JLabel("Human");
         raceLabel.setFont(new Font("nameFont", Font.PLAIN, 20));
         raceLabel.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED), "<html><u>Race:</u></html>", TitledBorder.CENTER, TitledBorder.BELOW_TOP));
 
@@ -66,11 +121,8 @@ public class CharSheet {
         JPanel strengthPanel = new JPanel();
         strengthPanel.setLayout(new GridBagLayout());
         strengthPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
-
         JLabel strengthLabel = new JLabel("Strength");
-        JLabel strengthScoreLabel = new JLabel("18");
         strengthScoreLabel.setFont(new Font("font", Font.BOLD, 20));
-        JButton strengthModButton = new JButton("  +4  ");
 
         c.gridx = 0;
         c.gridy = GridBagConstraints.RELATIVE;
@@ -81,11 +133,8 @@ public class CharSheet {
         JPanel dexterityPanel = new JPanel();
         dexterityPanel.setLayout(new GridBagLayout());
         dexterityPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
-
         JLabel dexterityLabel = new JLabel("Dexterity");
-        JLabel dexterityScoreLabel = new JLabel("18");
         dexterityScoreLabel.setFont(new Font("font", Font.BOLD, 20));
-        JButton dexterityModButton = new JButton("  +4  ");
 
         dexterityPanel.add(dexterityLabel, c);
         dexterityPanel.add(dexterityScoreLabel, c);
@@ -94,11 +143,8 @@ public class CharSheet {
         JPanel constitutionPanel = new JPanel();
         constitutionPanel.setLayout(new GridBagLayout());
         constitutionPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
-
         JLabel constitutionLabel = new JLabel("Constitution");
-        JLabel constitutionScoreLabel = new JLabel("18");
         constitutionScoreLabel.setFont(new Font("font", Font.BOLD, 20));
-        JButton constitutionModButton = new JButton("  +4  ");
 
         constitutionPanel.add(constitutionLabel, c);
         constitutionPanel.add(constitutionScoreLabel, c);
@@ -107,11 +153,8 @@ public class CharSheet {
         JPanel intelligencePanel = new JPanel();
         intelligencePanel.setLayout(new GridBagLayout());
         intelligencePanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
-
         JLabel intelligenceLabel = new JLabel("Intelligence");
-        JLabel intelligenceScoreLabel = new JLabel("18");
         intelligenceScoreLabel.setFont(new Font("font", Font.BOLD, 20));
-        JButton intelligenceModButton = new JButton("  +4  ");
 
         intelligencePanel.add(intelligenceLabel, c);
         intelligencePanel.add(intelligenceScoreLabel, c);
@@ -120,11 +163,8 @@ public class CharSheet {
         JPanel wisdomPanel = new JPanel();
         wisdomPanel.setLayout(new GridBagLayout());
         wisdomPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
-
         JLabel wisdomLabel = new JLabel("Wisdom");
-        JLabel wisdomScoreLabel = new JLabel("18");
         wisdomScoreLabel.setFont(new Font("font", Font.BOLD, 20));
-        JButton wisdomModButton = new JButton("  +4  ");
 
         wisdomPanel.add(wisdomLabel, c);
         wisdomPanel.add(wisdomScoreLabel, c);
@@ -133,11 +173,8 @@ public class CharSheet {
         JPanel charismaPanel = new JPanel();
         charismaPanel.setLayout(new GridBagLayout());
         charismaPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
-
         JLabel charismaLabel = new JLabel("Charisma");
-        JLabel charismaScoreLabel = new JLabel("18");
         charismaScoreLabel.setFont(new Font("font", Font.BOLD, 20));
-        JButton charismaModButton = new JButton("  +4  ");
 
         charismaPanel.add(charismaLabel, c);
         charismaPanel.add(charismaScoreLabel, c);
@@ -162,13 +199,6 @@ public class CharSheet {
         JLabel wisdomSaveLabel = new JLabel("Wisdom");
         JLabel charismaSaveLabel = new JLabel("Charisma");
 
-        JButton strengthSaveButton = new JButton("+4");
-        JButton dexteritySaveButton = new JButton("+4");
-        JButton constitutionSaveButton = new JButton("+4");
-        JButton intelligenceSaveButton = new JButton("+4");
-        JButton wisdomSaveButton = new JButton("+4");
-        JButton charismaSaveButton = new JButton("+4");
-
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
         savingThrowPanel.add(strengthSaveLabel, c);
@@ -190,42 +220,77 @@ public class CharSheet {
         skillsPanel.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED),"<html><u>Skills:</u></html>", TitledBorder.CENTER,TitledBorder.BELOW_TOP));
 
         JLabel acrobaticsLabel = new JLabel("Acrobatics");
+        acrobaticsButton.addActionListener(e -> {
+            this.character.skillCheck("Acrobatics");
+        });
         JLabel animalHandlingLabel = new JLabel("Animal Handling");
+        animalHandlingButton.addActionListener(e -> {
+            this.character.skillCheck("Animal Handling");
+        });
         JLabel arcanaLabel = new JLabel("Arcana");
+        arcanaButton.addActionListener(e -> {
+            this.character.skillCheck("Arcana");
+        });
         JLabel athleticsLabel = new JLabel("Athletics");
+        athleticsButton.addActionListener(e -> {
+            this.character.skillCheck("Athletics");
+        });
         JLabel deceptionLabel = new JLabel("Deception");
+        deceptionButton.addActionListener(e -> {
+            this.character.skillCheck("Deception");
+        });
         JLabel historyLabel = new JLabel("History");
+        historyButton.addActionListener(e -> {
+            this.character.skillCheck("History");
+        });
         JLabel insightLabel = new JLabel("Insight");
+        insightButton.addActionListener(e -> {
+            this.character.skillCheck("Insight");
+        });
         JLabel intimidationLabel = new JLabel("Intimidation");
+        intimidationButton.addActionListener(e -> {
+            this.character.skillCheck("Intimidation");
+        });
         JLabel investigationLabel = new JLabel("Investigation");
+        acrobaticsButton.addActionListener(e -> {
+            this.character.skillCheck("Investigation");
+        });
         JLabel medicineLabel = new JLabel("Medicine");
+        medicineButton.addActionListener(e -> {
+            this.character.skillCheck("Medicine");
+        });
         JLabel natureLabel = new JLabel("Nature");
+        natureButton.addActionListener(e -> {
+            this.character.skillCheck("Nature");
+        });
         JLabel perceptionLabel = new JLabel("Perception");
+        perceptionButton.addActionListener(e -> {
+            this.character.skillCheck("Perception");
+        });
         JLabel performanceLabel = new JLabel("Performance");
+        performanceButton.addActionListener(e -> {
+            this.character.skillCheck("Performance");
+        });
         JLabel persuasionLabel = new JLabel("Persuasion");
+        persuasionButton.addActionListener(e -> {
+            this.character.skillCheck("Persuasion");
+        });
         JLabel religionLabel = new JLabel("Religion");
+        religionButton.addActionListener(e -> {
+            this.character.skillCheck("Religion");
+        });
         JLabel sleightOfHandLabel = new JLabel("Sleight of hand");
+        sleightOfHandButton.addActionListener(e -> {
+            this.character.skillCheck("Sleight of hand");
+        });
         JLabel stealthLabel = new JLabel("Stealth");
+        stealthButton.addActionListener(e -> {
+            this.character.skillCheck("Stealth");
+        });
         JLabel survivalLabel = new JLabel("Survival");
-
-        JButton acrobaticsButton = new JButton("+4");
-        JButton animalHandlingButton = new JButton("+4");
-        JButton arcanaButton = new JButton("+4");
-        JButton athleticsButton = new JButton("+4");
-        JButton deceptionButton = new JButton("+4");
-        JButton historyButton = new JButton("+4");
-        JButton insightButton = new JButton("+4");
-        JButton intimidationButton = new JButton("+4");
-        JButton investigationButton = new JButton("+4");
-        JButton medicineButton = new JButton("+4");
-        JButton natureButton = new JButton("+4");
-        JButton perceptionButton = new JButton("+4");
-        JButton performanceButton = new JButton("+4");
-        JButton persuasionButton = new JButton("+4");
-        JButton religionButton = new JButton("+4");
-        JButton sleightOfHandButton = new JButton("+4");
-        JButton stealthButton = new JButton("+4");
-        JButton survivalButton = new JButton("+4");
+        survivalButton.addActionListener(e -> {
+            this.character.skillCheck("Survival");
+        });
 
         c.gridx = 0;
         skillsPanel.add(acrobaticsLabel, c);
@@ -271,50 +336,90 @@ public class CharSheet {
         healthPanel.setLayout(new GridBagLayout());
 
         JPanel hitPointsPanel = new JPanel();
-        hitPointsPanel.setLayout(new GridBagLayout());
+        hitPointsPanel.setLayout(new GridLayout(0,2));
         hitPointsPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
 
         JLabel hitPointsNameLabel = new JLabel("<html><u>Hit points:</u></html>");
-        JLabel hitPointsLabel = new JLabel("<html><big>10/10</big></html>");
+        hitPointsLabel.setFont(new Font("f",hitPointsLabel.getFont().getStyle(), 16));
 
         JPanel temporaryHitPointsPanel = new JPanel();
         temporaryHitPointsPanel.setLayout(new GridBagLayout());
         temporaryHitPointsPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
 
         JLabel temporaryHitPointsNameLabel = new JLabel("<html><u>Temp HP:</u></html>");
-        JLabel temporaryHitPointsLabel = new JLabel("<html><big>0</big></html>");
+        temporaryHitPointsLabel.setFont(new Font("f",hitPointsLabel.getFont().getStyle(), 16));
+        JButton addTempHpButton = new JButton(" Add temp ");
+
+        JButton healButton = new JButton("Heal");
+        healButton.addActionListener(e -> {
+            try {
+                int healing = 0;
+                while (healing <= 0) {
+                    healing = Integer.parseInt(JOptionPane.showInputDialog("Enter the amount of healing:"));
+                }
+                this.character.heal(healing);
+                updateSheet();
+            } catch (Exception exception) {
+
+            }
+        });
+
+        JButton damageButton = new JButton("Damage");
+        damageButton.addActionListener(e -> {
+            try {
+                int damage = 0;
+                while (damage <= 0) {
+                    damage = Integer.parseInt(JOptionPane.showInputDialog("Enter the amount of damage:"));
+                }
+                this.character.damage(damage);
+                updateSheet();
+            } catch (Exception exception) {
+
+            }
+        });
+
+        hitPointsPanel.add(hitPointsNameLabel);
+        hitPointsPanel.add(healButton);
+        hitPointsPanel.add(hitPointsLabel);
+        hitPointsPanel.add(damageButton);
 
         c.gridx = 0;
-        hitPointsPanel.add(hitPointsNameLabel, c);
-        hitPointsPanel.add(hitPointsLabel, c);
-
+        c.weightx = 1;
         temporaryHitPointsPanel.add(temporaryHitPointsNameLabel, c);
         temporaryHitPointsPanel.add(temporaryHitPointsLabel, c);
+        c.gridx = 1;
+        c.weightx = 0;
+        c.gridheight = 2;
+        temporaryHitPointsPanel.add(addTempHpButton, c);
 
         JPanel hitDicePanel = new JPanel();
         hitDicePanel.setLayout(new GridBagLayout());
         hitDicePanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
 
         JLabel hitDiceNameLabel = new JLabel("<html><u>Hit Dice: </u></html>");
-        JLabel hitDiceLabel = new JLabel("3d8");
+       hitDiceLabel.setFont(new Font("f",hitDiceLabel.getFont().getStyle(), 16));
         JButton spendHitDieButton = new JButton("Use hit die");
+        spendHitDieButton.addActionListener(e -> {
+            if (this.character.getCurrentHitDice() > 0) {
+                this.character.spendHitDie();
+                updateSheet();
+            }
+        });
 
         c.gridx = 0;
         c.weightx = 1;
+        c.gridheight = 1;
         hitDicePanel.add(hitDiceNameLabel, c);
         hitDicePanel.add(hitDiceLabel, c);
         c.gridx = 1;
         c.gridheight = 2;
+        c.weightx = 0;
         hitDicePanel.add(spendHitDieButton, c);
 
         c.gridheight = 1;
-        c.weightx = 0;
-        c.gridx = GridBagConstraints.RELATIVE;
-        c.gridy = 0;
+        c.weightx = 1;
         healthPanel.add(hitPointsPanel, c);
         healthPanel.add(temporaryHitPointsPanel, c);
-        c.gridy = 1;
-        c.gridwidth = 2;
         healthPanel.add(hitDicePanel, c);
 
         JPanel deathSavePanel = new JPanel();
@@ -323,13 +428,26 @@ public class CharSheet {
 
         JLabel successLabel = new JLabel("Successes: ");
         JLabel failureLabel = new JLabel("Failures: ");
-        JCheckBox firstSuccess = new JCheckBox();
-        JCheckBox secondSuccess = new JCheckBox();
-        JCheckBox thirdSuccess = new JCheckBox();
-        JCheckBox firstFailure = new JCheckBox();
-        JCheckBox secondFailure = new JCheckBox();
-        JCheckBox thirdFailure = new JCheckBox();
-        JButton resetDeathSavesButton = new JButton("Reset saves");
+
+        firstSuccess.setEnabled(false);
+        secondSuccess.setEnabled(false);
+        thirdSuccess.setEnabled(false);
+        firstFailure.setEnabled(false);
+        secondFailure.setEnabled(false);
+        thirdFailure.setEnabled(false);
+
+        JButton rollDeathSaveButton = new JButton("Roll save");
+        rollDeathSaveButton.addActionListener(e -> {
+            this.character.deathSave();
+            updateSheet();
+        });
+
+        JButton resetDeathSavesButton = new JButton("Reset");
+        resetDeathSavesButton.addActionListener(e -> {
+            this.character.resetDeathSaves();
+            updateSheet();
+        });
+
 
         c.gridy = 0;
         c.gridheight = 1;
@@ -344,7 +462,8 @@ public class CharSheet {
         deathSavePanel.add(secondFailure, c);
         deathSavePanel.add(thirdFailure, c);
         c.gridy = 2;
-        c.gridwidth = GridBagConstraints.REMAINDER;
+        c.gridwidth = GridBagConstraints.RELATIVE;
+        deathSavePanel.add(rollDeathSaveButton, c);
         deathSavePanel.add(resetDeathSavesButton, c);
         c.gridwidth = 1;
 
@@ -356,16 +475,13 @@ public class CharSheet {
         armorClassPanel.setLayout(new GridBagLayout());
         armorClassPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
         JLabel armorClassNameLabel = new JLabel("<html><u>AC:</u><html>");
-
-        JLabel armorClassLabel = new JLabel("18");
-
+        armorClassLabel.setFont(new Font("f",armorClassLabel.getFont().getStyle(), 16));
 
         JPanel initiativePanel = new JPanel();
         initiativePanel.setLayout(new GridBagLayout());
         initiativePanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
         JLabel initiativeNameLabel = new JLabel("<html><u>Init:</u><html>");
-        JLabel initiativeLabel = new JLabel("4");
-
+        initiativeLabel.setFont(new Font("f",initiativeLabel.getFont().getStyle(), 16));
 
         JPanel inspirationPanel = new JPanel();
         inspirationPanel.setLayout(new GridBagLayout());
@@ -410,18 +526,22 @@ public class CharSheet {
         miscPanel.add(initiativePanel, c);
         miscPanel.add(inspirationPanel, c);
 
+        JButton longRestButton = new JButton("Long Rest");
+        longRestButton.addActionListener(e -> {
+            this.character.longRest();
+            updateSheet();
+        });
+
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = GridBagConstraints.RELATIVE;
         c.gridwidth = GridBagConstraints.REMAINDER;
         mainPanel.add(characterInfoPanel, c);
-        c.fill = GridBagConstraints.NONE;
         c.weightx = 1;
         c.gridwidth = 1;
         c.gridheight = 5;
-        c.fill = GridBagConstraints.VERTICAL;
+        c.fill = GridBagConstraints.BOTH;
         mainPanel.add(attributesPanel, c);
-        c.fill = GridBagConstraints.NONE;
         c.gridx = 1;
         c.gridheight = GridBagConstraints.RELATIVE;
         mainPanel.add(skillsPanel, c);
@@ -441,12 +561,89 @@ public class CharSheet {
         c.gridx = 5;
         c.weightx = 1;
         mainPanel.add(actionPanel, c);
+        mainPanel.add(longRestButton, c);
 
-
-
+        updateSheet();
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.pack();
+        frame.setResizable(false);
         frame.setLocation(d.width/2 - frame.getWidth()/2, d.height/2 - frame.getHeight()/2);
         frame.setVisible(true);
-        frame.setVisible(true);
+    }
+    private void updateSheet() {
+        nameLabel.setText(character.getName());
+
+        if (null != character.getBaseClass().getSubClass()) {
+            classLabel.setText(character.getBaseClass().getSubClass());
+        } else {
+            classLabel.setText(character.getBaseClass().getName());
+        }
+
+        if (null != character.getRace().getSubRace()) {
+            raceLabel.setText(character.getRace().getSubRace());
+        } else {
+            raceLabel.setText(character.getRace().getName());
+        }
+
+        strengthScoreLabel.setText("" + character.getAttributes().getValue("Strength"));
+        dexterityScoreLabel.setText("" + character.getAttributes().getValue("Dexterity"));
+        constitutionScoreLabel.setText("" + character.getAttributes().getValue("Constitution"));
+        intelligenceScoreLabel.setText("" + character.getAttributes().getValue("Intelligence"));
+        wisdomScoreLabel.setText("" + character.getAttributes().getValue("Wisdom"));
+        charismaScoreLabel.setText("" + character.getAttributes().getValue("Charisma"));
+        strengthModButton.setText(character.getAttributes().getAttribute("Strength").getModAsString());
+        dexterityModButton.setText(character.getAttributes().getAttribute("Dexterity").getModAsString());
+        constitutionModButton.setText(character.getAttributes().getAttribute("Constitution").getModAsString());
+        intelligenceModButton.setText(character.getAttributes().getAttribute("Intelligence").getModAsString());
+        wisdomModButton.setText(character.getAttributes().getAttribute("Wisdom").getModAsString());
+        charismaModButton.setText(character.getAttributes().getAttribute("Charisma").getModAsString());
+        strengthSaveButton.setText(character.getSavingThrowAsString("Strength"));
+        dexteritySaveButton.setText(character.getSavingThrowAsString("Dexterity"));
+        constitutionSaveButton.setText(character.getSavingThrowAsString("Constitution"));
+        intelligenceSaveButton.setText(character.getSavingThrowAsString("Intelligence"));
+        wisdomSaveButton.setText(character.getSavingThrowAsString("Wisdom"));
+        charismaSaveButton.setText(character.getSavingThrowAsString("Charisma"));
+        acrobaticsButton.setText(character.getSkillModAsString("Acrobatics"));
+        animalHandlingButton.setText(character.getSkillModAsString("Animal Handling"));
+        arcanaButton.setText(character.getSkillModAsString("Arcana"));
+        athleticsButton.setText(character.getSkillModAsString("Athletics"));
+        deceptionButton.setText(character.getSkillModAsString("Deception"));
+        historyButton.setText(character.getSkillModAsString("History"));
+        insightButton.setText(character.getSkillModAsString("Insight"));
+        intimidationButton.setText(character.getSkillModAsString("Intimidation"));
+        investigationButton.setText(character.getSkillModAsString("Investigation"));
+        medicineButton.setText(character.getSkillModAsString("Medicine"));
+        natureButton.setText(character.getSkillModAsString("Nature"));
+        perceptionButton.setText(character.getSkillModAsString("Perception"));
+        performanceButton.setText(character.getSkillModAsString("Performance"));
+        persuasionButton.setText(character.getSkillModAsString("Persuasion"));
+        religionButton.setText(character.getSkillModAsString("Religion"));
+        sleightOfHandButton.setText(character.getSkillModAsString("Sleight of Hand"));
+        stealthButton.setText(character.getSkillModAsString("Stealth"));
+        survivalButton.setText(character.getSkillModAsString("Survival"));
+        hitPointsLabel.setText("" + character.getCurrentHp() + "/" + character.getMaxHp());
+        temporaryHitPointsLabel.setText("" + character.getTempHp());
+        hitDiceLabel.setText("" + character.getCurrentHitDice() + "d" + character.getBaseClass().getHpDice());
+        firstSuccess.setSelected(character.getDeathSaveSuccesses() >= 1);
+        secondSuccess.setSelected(character.getDeathSaveSuccesses() >= 2);
+        thirdSuccess.setSelected(character.getDeathSaveSuccesses() >= 3);
+        firstFailure.setSelected(character.getDeathSaveFailures() >= 1);
+        secondFailure.setSelected(character.getDeathSaveFailures() >= 2);
+        thirdFailure.setSelected(character.getDeathSaveFailures() >= 3);
+        armorClassLabel.setText("" + character.getAc());
+        initiativeLabel.setText("" + character.getAttributes().getMod("Dexterity"));
+    }
+    public void newCharacter(character.Character character) {
+        this.character = character;
+    }
+    public void getCharacterFromCreator() {
+        this.character = characterCreator.getCharacter();
+        updateSheet();
+        //System.out.print(characterCreator.getCharacter());
+    }
+
+    public void sendCharacterToSheet(Character newCharacter) {
+        this.character = newCharacter;
+        updateSheet();
     }
 }

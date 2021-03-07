@@ -9,9 +9,12 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class CharacterCreator {
+    private final CharacterSheet characterSheet;
+    private character.Character newCharacter = null;
     private final Attributes atr = new Attributes();
     private final BackgroundDataBase backgrounds = new BackgroundDataBase();
     private final DiceRoller r;
@@ -23,7 +26,9 @@ public class CharacterCreator {
     private final JComboBox<String> attribute5Box = new JComboBox<>(attributes);
     private final JComboBox<String> attribute6Box = new JComboBox<>(attributes);
     private final JTextArea attributeDescriptionArea = new JTextArea();
-    public CharacterCreator() {
+
+    public CharacterCreator(CharacterSheet characterSheet) {
+        this.characterSheet = characterSheet;
         this.r = new DiceRoller();
 
         JFrame frame = new JFrame("Character Creator");
@@ -44,6 +49,13 @@ public class CharacterCreator {
         descriptionArea.setLineWrap(true);
         descriptionArea.setWrapStyleWord(true);
 
+        JTextArea featuresDescriptionArea = new JTextArea();
+        descriptionArea.setBackground(Color.lightGray);
+        featuresDescriptionArea.setPreferredSize(new Dimension(200, 200));
+        featuresDescriptionArea.setEditable(false);
+        featuresDescriptionArea.setLineWrap(true);
+        featuresDescriptionArea.setWrapStyleWord(true);
+
         String[] races = new String[]{"Select Race", "Elf", "Dwarf", "Human", "Orc"};
         JComboBox<String> raceSelect = new JComboBox<>(races);
         Dimension dd = new Dimension(130, 10);
@@ -62,6 +74,7 @@ public class CharacterCreator {
                     subRaceSelect.addItem("High Elf");
                     subRaceSelect.addItem("Wood Elf");
                     descriptionArea.setText("Elf Description");
+                    featuresDescriptionArea.setText("Elf features");
                 }
                 case "Dwarf" -> {
                     subRaceSelect.removeAllItems();
@@ -156,6 +169,7 @@ public class CharacterCreator {
                         + ":\n" + backgrounds.getBackground(b).getDescription()
                         + "\n\n" + backgrounds.getBackground(b).getFeature()[0]
                         + ":\n" + backgrounds.getBackground(b).getFeature()[1]);
+
             } catch (NullPointerException e) {
                 descriptionArea.setText("No background selected.");
             }
@@ -192,10 +206,15 @@ public class CharacterCreator {
         raceClassBackgroundPanel.setLayout(new GridBagLayout());
         raceClassBackgroundPanel.setBackground(Color.lightGray);
         GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = GridBagConstraints.RELATIVE;
         c.weightx = 1;
         raceClassBackgroundPanel.add(inputPanel, c);
+        raceClassBackgroundPanel.add(featuresDescriptionArea, c);
         c.weightx = 0;
+        c.gridx = 1;
         raceClassBackgroundPanel.add(Box.createHorizontalStrut(10), c);
+        c.gridx = 2;
         c.weightx = 1;
         raceClassBackgroundPanel.add(descriptionArea, c);
 
@@ -318,8 +337,37 @@ public class CharacterCreator {
         attributesPanel.add(rollAttributesPanel);
         attributesPanel.add(attributeDescriptionArea);
 
+        JPanel personalityPanel = new JPanel();
+        JButton finalizeCharacterButton = new JButton("Create Character");
+
+        finalizeCharacterButton.addActionListener(e -> {
+            HashMap<String, String> attributes = new HashMap<>();
+            attributes.put((String) attribute1Box.getSelectedItem(), attribute1Label.getText());
+            attributes.put((String) attribute2Box.getSelectedItem(), attribute2Label.getText());
+            attributes.put((String) attribute3Box.getSelectedItem(), attribute3Label.getText());
+            attributes.put((String) attribute4Box.getSelectedItem(), attribute4Label.getText());
+            attributes.put((String) attribute5Box.getSelectedItem(), attribute5Label.getText());
+            attributes.put((String) attribute6Box.getSelectedItem(), attribute6Label.getText());
+
+            this.newCharacter = new character.Character(nameTextField.getText()
+                    , (String) classSelect.getSelectedItem()
+                    , (String) raceSelect.getSelectedItem()
+                    , (String) backgroundSelect.getSelectedItem()
+                    , Integer.parseInt(attributes.get("Strength"))
+                    , Integer.parseInt(attributes.get("Dexterity"))
+                    , Integer.parseInt(attributes.get("Constitution"))
+                    , Integer.parseInt(attributes.get("Intelligence"))
+                    , Integer.parseInt(attributes.get("Wisdom"))
+                    , Integer.parseInt(attributes.get("Charisma")));
+
+            this.characterSheet.sendCharacterToSheet(this.newCharacter);
+        });
+
+        personalityPanel.add(finalizeCharacterButton);
+
         mainPanel.addTab("Race, Class & Background",raceClassBackgroundPanel);
         mainPanel.addTab("Attributes", attributesPanel);
+        mainPanel.addTab("Personality & Description", personalityPanel);
 
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(d.width / 2 - frame.getWidth() / 2, d.height / 2 - frame.getHeight() / 2);
@@ -369,5 +417,8 @@ public class CharacterCreator {
         } else {
             this.attributeDescriptionArea.setText("\n\n\n\n Select an attribute.");
         }
+    }
+    public character.Character getCharacter() {
+        return this.newCharacter;
     }
 }
