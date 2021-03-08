@@ -7,6 +7,7 @@ import classes.BaseClass;
 import items.Item;
 import races.Race;
 import races.RaceLibrary;
+import races.Subrace;
 import spells.Spell;
 
 import java.util.Iterator;
@@ -18,6 +19,7 @@ public class Character {
     private final String name;
     private final BaseClass baseClass;
     private final Race race;
+    private final Subrace subrace;
     private final Background background;
     private final Attributes attributes;
     private final Feats feats;
@@ -34,32 +36,37 @@ public class Character {
     private int deathSaveFailures;
     private int deathSaveSuccesses;
     private int level;
+    private int speed;
 
     public Character() {
         this.name = "Democrates";
         this.baseClass = new ClassDataBase().getClass("Fighter");
-        this.race = new RaceLibrary().getRace("Human");
+        this.subrace = new RaceLibrary().getSubrace("Standard Human");
+        this.race = this.subrace.getParentRace();
         this.background = new BackgroundDataBase().getBackground("Outlander");
-        this.attributes = new Attributes(16, 13, 14, 8, 10, 12);
+        this.attributes = new Attributes(13, 12, 11, 10, 9, 8);
+        setAttributes();
         this.feats = new Feats();
-        this.inv = new Inventory();
-        this.proficiencies = new Proficiencies();
         updateMaxHp();
         this.currentHp = this.maxHp;
+        this.inv = new Inventory();
+        this.proficiencies = new Proficiencies();
         this.tempHp = 0;
         this.spellBook = new SpellBook(this.baseClass.getName());
         this.skills = new Skills();
         this.level = 1;
         this.currentHitDice = this.level;
+        this.speed = this.subrace.getSpeedModifier() + this.race.getSpeed();
         updateProfBonus();
         updateAc();
     }
 
-    public Character(String name, String baseClass, String race, String background
+    public Character(String name, String baseClass, String subrace, String background
             , int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma) {
         this.name = name;
         this.baseClass = new ClassDataBase().getClass(baseClass);
-        this.race = new RaceLibrary().getRace(race);
+        this.subrace = new RaceLibrary().getSubrace(subrace);
+        this.race = this.subrace.getParentRace();
         this.background = new BackgroundDataBase().getBackground(background);
         this.attributes = new Attributes(strength, dexterity, constitution, intelligence, wisdom, charisma);
         this.feats = new Feats();
@@ -71,9 +78,20 @@ public class Character {
         this.skills = new Skills();
         this.level = 1;
         this.currentHitDice = this.level;
+        setAttributes();
         updateProfBonus();
         updateAc();
         updateMaxHp();
+    }
+
+    private void setAttributes() {
+        int strength = this.attributes.getValue("Strength") + this.subrace.getAsi().get("Strength");
+        int dexterity = this.attributes.getValue("Dexterity") + this.subrace.getAsi().get("Dexterity");
+        int constitution = this.attributes.getValue("Constitution") + this.subrace.getAsi().get("Constitution");
+        int intelligence = this.attributes.getValue("Intelligence") + this.subrace.getAsi().get("Intelligence");
+        int wisdom = this.attributes.getValue("Wisdom") + this.subrace.getAsi().get("Wisdom");
+        int charisma = this.attributes.getValue("Charisma") + this.subrace.getAsi().get("Charisma");
+        this.attributes.setAll(strength, dexterity, constitution, intelligence, wisdom, charisma);
     }
 
     public void updateAc() {
@@ -113,12 +131,17 @@ public class Character {
         return name;
     }
 
+
     public BaseClass getBaseClass() {
         return baseClass;
     }
 
     public Race getRace() {
         return race;
+    }
+
+    public Subrace getSubrace() {
+        return this.subrace;
     }
 
     public int getLevel() {

@@ -1,6 +1,7 @@
 import backgrounds.BackgroundDataBase;
 import backgrounds.Background;
 import character.Attributes;
+import races.RaceLibrary;
 import utilities.DiceRoller;
 
 import javax.swing.*;
@@ -16,6 +17,7 @@ public class CharacterCreator {
     private final CharacterSheet characterSheet;
     private character.Character newCharacter = null;
     private final Attributes atr = new Attributes();
+    private final RaceLibrary raceLibrary = new RaceLibrary();
     private final BackgroundDataBase backgrounds = new BackgroundDataBase();
     private final DiceRoller r;
     private final String[] attributes = {"Select attribute", "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"};
@@ -50,48 +52,37 @@ public class CharacterCreator {
         descriptionArea.setWrapStyleWord(true);
 
         JTextArea featuresDescriptionArea = new JTextArea();
-        descriptionArea.setBackground(Color.lightGray);
+        featuresDescriptionArea.setBackground(Color.lightGray);
         featuresDescriptionArea.setPreferredSize(new Dimension(200, 200));
         featuresDescriptionArea.setEditable(false);
         featuresDescriptionArea.setLineWrap(true);
         featuresDescriptionArea.setWrapStyleWord(true);
 
-        String[] races = new String[]{"Select Race", "Elf", "Dwarf", "Human", "Orc"};
-        JComboBox<String> raceSelect = new JComboBox<>(races);
+        JComboBox<String> raceSelect = new JComboBox<>(this.raceLibrary.getRaces());
         Dimension dd = new Dimension(130, 10);
         raceSelect.setPreferredSize(dd);
 
-        String[] none = new String[]{"N/A"};
-        JComboBox<String> subRaceSelect = new JComboBox<>(none);
+        JComboBox<String> subRaceSelect = new JComboBox<>(this.raceLibrary.getSubraces((String) raceSelect.getSelectedItem()));
         subRaceSelect.setPreferredSize(dd);
 
-        raceSelect.addActionListener(event -> {
+        raceSelect.addActionListener(e -> {
 
-            switch (Objects.requireNonNull((String) raceSelect.getSelectedItem())) {
-                case "Elf" -> {
-                    subRaceSelect.removeAllItems();
-                    subRaceSelect.addItem("Subrace");
-                    subRaceSelect.addItem("High Elf");
-                    subRaceSelect.addItem("Wood Elf");
-                    descriptionArea.setText("Elf Description");
-                    featuresDescriptionArea.setText("Elf features");
-                }
-                case "Dwarf" -> {
-                    subRaceSelect.removeAllItems();
-                    subRaceSelect.addItem("Subrace");
-                    subRaceSelect.addItem("Hill Dwarf");
-                    subRaceSelect.addItem("Mountain Dwarf");
-                }
-                case "Human" -> {
-                    subRaceSelect.removeAllItems();
-                    subRaceSelect.addItem("Subrace");
-                    subRaceSelect.addItem("Human");
-                    subRaceSelect.addItem("Variant Human");
-                }
-                default -> {
-                    subRaceSelect.removeAllItems();
-                    subRaceSelect.addItem("N/A");
-                }
+            descriptionArea.setText(raceLibrary.getRace((String) raceSelect.getSelectedItem()).getRaceName() + "\n\n" +
+                    raceLibrary.getRace((String) raceSelect.getSelectedItem()).getRaceDescription());
+            featuresDescriptionArea.setText(raceLibrary.getRace((String) raceSelect.getSelectedItem()).getRaceFeaturesAsString());
+            subRaceSelect.removeAllItems();
+            for (String string : this.raceLibrary.getSubraces((String) raceSelect.getSelectedItem())) {
+                subRaceSelect.addItem(string);
+            }
+        });
+
+        subRaceSelect.addActionListener(e -> {
+            try {
+                descriptionArea.setText(raceLibrary.getSubrace((String) subRaceSelect.getSelectedItem()).getSubraceName() +
+                        "\n\n" + raceLibrary.getSubrace((String) subRaceSelect.getSelectedItem()).getSubraceDescription());
+                featuresDescriptionArea.setText(raceLibrary.getSubrace((String) subRaceSelect.getSelectedItem()).getSubraceFeaturesAsString());
+            } catch(NullPointerException exception) {
+
             }
         });
 
@@ -99,7 +90,7 @@ public class CharacterCreator {
         JComboBox<String> classSelect = new JComboBox<>(classes);
         classSelect.setPreferredSize(dd);
 
-        JComboBox<String> subClassSelect = new JComboBox<>(none);
+        JComboBox<String> subClassSelect = new JComboBox<>();
         subClassSelect.setPreferredSize(dd);
 
         classSelect.addActionListener(event -> {
@@ -204,15 +195,19 @@ public class CharacterCreator {
 
         JPanel raceClassBackgroundPanel = new JPanel();
         raceClassBackgroundPanel.setLayout(new GridBagLayout());
+        raceClassBackgroundPanel.setBorder(new EmptyBorder(10,10,10,10));
         raceClassBackgroundPanel.setBackground(Color.lightGray);
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = GridBagConstraints.RELATIVE;
         c.weightx = 1;
         raceClassBackgroundPanel.add(inputPanel, c);
+        raceClassBackgroundPanel.add(Box.createVerticalStrut(50), c);
+        c.fill = GridBagConstraints.BOTH;
         raceClassBackgroundPanel.add(featuresDescriptionArea, c);
         c.weightx = 0;
         c.gridx = 1;
+        c.gridheight = 3;
         raceClassBackgroundPanel.add(Box.createHorizontalStrut(10), c);
         c.gridx = 2;
         c.weightx = 1;
@@ -351,7 +346,7 @@ public class CharacterCreator {
 
             this.newCharacter = new character.Character(nameTextField.getText()
                     , (String) classSelect.getSelectedItem()
-                    , (String) raceSelect.getSelectedItem()
+                    , (String) subRaceSelect.getSelectedItem()
                     , (String) backgroundSelect.getSelectedItem()
                     , Integer.parseInt(attributes.get("Strength"))
                     , Integer.parseInt(attributes.get("Dexterity"))
@@ -418,6 +413,7 @@ public class CharacterCreator {
             this.attributeDescriptionArea.setText("\n\n\n\n Select an attribute.");
         }
     }
+
     public character.Character getCharacter() {
         return this.newCharacter;
     }

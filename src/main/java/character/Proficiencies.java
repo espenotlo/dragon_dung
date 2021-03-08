@@ -1,6 +1,7 @@
 package character;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Proficiencies {
     private final ArrayList<String> skills;
@@ -9,6 +10,7 @@ public class Proficiencies {
     private final ArrayList<String> languages;
     private final ArrayList<String> weapons;
     private final ArrayList<String> armors;
+    private final ArrayList<String> savingThrowAdvantage;
 
     public Proficiencies() {
         skills = new ArrayList<>();
@@ -17,6 +19,7 @@ public class Proficiencies {
         languages = new ArrayList<>();
         weapons = new ArrayList<>();
         armors = new ArrayList<>();
+        savingThrowAdvantage = new ArrayList<>();
 
     }
     public void addSkillProf(String skill) {
@@ -95,6 +98,20 @@ public class Proficiencies {
             armors.add(armor);
         }
     }
+
+    public void addSavingThrowAdvantage(String savingThrow) {
+        boolean isProficient = false;
+        for (String i : savingThrowAdvantage) {
+            if (i.equals(savingThrow)) {
+                System.out.println("Already advantage with " + savingThrow + " saves!");
+                isProficient = true;
+            }
+        }
+        if (!isProficient) {
+            savingThrowAdvantage.add(savingThrow);
+        }
+    }
+
     public ArrayList<String> getSkills() {
         return this.skills;
     }
@@ -117,5 +134,23 @@ public class Proficiencies {
 
     public ArrayList<String> getArmors() {
         return this.armors;
+    }
+
+    public ArrayList<String> getSavingThrowAdvantage() {
+        return savingThrowAdvantage;
+    }
+
+    public void addWeapons(String[] weapons) {
+        this.weapons.addAll(Arrays.asList(weapons));
+    }
+
+    public void clear() {
+        this.weapons.clear();
+        this.armors.clear();
+        this.tools.clear();
+        this.languages.clear();
+        this.skills.clear();
+        this.savingThrows.clear();
+        this.savingThrowAdvantage.clear();
     }
 }

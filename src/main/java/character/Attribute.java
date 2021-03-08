@@ -17,11 +17,7 @@ public class Attribute {
     }
 
     private void updateMod() {
-        if (this.value - 10 > 0) {
-            this.mod = (int) floor((this.value - 10) / 2f);
-        } else {
-            this.mod = round((this.value - 10) / 2f);
-        }
+        this.mod = (int) floor((this.value - 10) / 2f);
     }
 
     public String getName() {

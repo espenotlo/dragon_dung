@@ -7,11 +7,11 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 
 public class CharacterSheet {
-    private CharacterCreator characterCreator;
     private character.Character character = new character.Character();
     private final JLabel nameLabel = new JLabel(character.getName());
     private final JLabel classLabel = new JLabel(character.getBaseClass().getName());
-    private final JLabel raceLabel = new JLabel(character.getRace().getSubRace());
+    private final JLabel raceLabel = new JLabel(character.getSubrace().getSubraceName());
+    private final JLabel backgroundLabel = new JLabel(character.getBackground().getName());
     private final JLabel strengthScoreLabel = new JLabel();
     private final JButton strengthModButton = new JButton();
     private final JLabel dexterityScoreLabel = new JLabel();
@@ -61,7 +61,6 @@ public class CharacterSheet {
     private final JLabel initiativeLabel = new JLabel();
 
     public CharacterSheet() {
-
         JFrame frame = new JFrame();
         frame.setSize(600,600);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -70,21 +69,15 @@ public class CharacterSheet {
         frame.setJMenuBar(menuBar);
 
         JMenuItem newCharacter = new JMenuItem("New Character");
-        newCharacter.addActionListener(e -> {
-            this.characterCreator = new CharacterCreator(this);
-        });
+        newCharacter.addActionListener(e -> new CharacterCreator(this));
 
         JMenuItem selectCharacter = new JMenuItem("Select Character..");
 
         JMenuItem deleteCharacter = new JMenuItem("Delete Character..");
 
-        JMenuItem importCharacter = new JMenuItem(("Import from creator"));
-        importCharacter.addActionListener(e -> getCharacterFromCreator());
-
         menuBar.add(newCharacter);
         menuBar.add(selectCharacter);
         menuBar.add(deleteCharacter);
-        menuBar.add(importCharacter);
 
         JPanel mainPanel = (JPanel) frame.getContentPane();
         mainPanel.setBorder(new EmptyBorder(10,10,10,10));
@@ -107,11 +100,16 @@ public class CharacterSheet {
         raceLabel.setFont(new Font("nameFont", Font.PLAIN, 20));
         raceLabel.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED), "<html><u>Race:</u></html>", TitledBorder.CENTER, TitledBorder.BELOW_TOP));
 
+        backgroundLabel.setFont(new Font("nameFont", Font.PLAIN, 20));
+        backgroundLabel.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED), "<html><u>Background:</u></html>", TitledBorder.CENTER, TitledBorder.BELOW_TOP));
+
+
         c.gridx = GridBagConstraints.RELATIVE;
         c.gridy = 0;
         characterInfoPanel.add(nameLabel, c);
         characterInfoPanel.add(classLabel, c);
         characterInfoPanel.add(raceLabel, c);
+        characterInfoPanel.add(backgroundLabel, c);
 
         //Attributes:
         JPanel attributesPanel = new JPanel();
@@ -182,8 +180,8 @@ public class CharacterSheet {
 
         attributesPanel.add(strengthPanel);
         attributesPanel.add(dexterityPanel);
-        attributesPanel.add(intelligencePanel);
         attributesPanel.add(constitutionPanel);
+        attributesPanel.add(intelligencePanel);
         attributesPanel.add(wisdomPanel);
         attributesPanel.add(charismaPanel);
 
@@ -220,77 +218,41 @@ public class CharacterSheet {
         skillsPanel.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED),"<html><u>Skills:</u></html>", TitledBorder.CENTER,TitledBorder.BELOW_TOP));
 
         JLabel acrobaticsLabel = new JLabel("Acrobatics");
-        acrobaticsButton.addActionListener(e -> {
-            this.character.skillCheck("Acrobatics");
-        });
+        acrobaticsButton.addActionListener(e -> this.character.skillCheck("Acrobatics"));
         JLabel animalHandlingLabel = new JLabel("Animal Handling");
-        animalHandlingButton.addActionListener(e -> {
-            this.character.skillCheck("Animal Handling");
-        });
+        animalHandlingButton.addActionListener(e -> this.character.skillCheck("Animal Handling"));
         JLabel arcanaLabel = new JLabel("Arcana");
-        arcanaButton.addActionListener(e -> {
-            this.character.skillCheck("Arcana");
-        });
+        arcanaButton.addActionListener(e -> this.character.skillCheck("Arcana"));
         JLabel athleticsLabel = new JLabel("Athletics");
-        athleticsButton.addActionListener(e -> {
-            this.character.skillCheck("Athletics");
-        });
+        athleticsButton.addActionListener(e -> this.character.skillCheck("Athletics"));
         JLabel deceptionLabel = new JLabel("Deception");
-        deceptionButton.addActionListener(e -> {
-            this.character.skillCheck("Deception");
-        });
+        deceptionButton.addActionListener(e -> this.character.skillCheck("Deception"));
         JLabel historyLabel = new JLabel("History");
-        historyButton.addActionListener(e -> {
-            this.character.skillCheck("History");
-        });
+        historyButton.addActionListener(e -> this.character.skillCheck("History"));
         JLabel insightLabel = new JLabel("Insight");
-        insightButton.addActionListener(e -> {
-            this.character.skillCheck("Insight");
-        });
+        insightButton.addActionListener(e -> this.character.skillCheck("Insight"));
         JLabel intimidationLabel = new JLabel("Intimidation");
-        intimidationButton.addActionListener(e -> {
-            this.character.skillCheck("Intimidation");
-        });
+        intimidationButton.addActionListener(e -> this.character.skillCheck("Intimidation"));
         JLabel investigationLabel = new JLabel("Investigation");
-        acrobaticsButton.addActionListener(e -> {
-            this.character.skillCheck("Investigation");
-        });
+        acrobaticsButton.addActionListener(e -> this.character.skillCheck("Investigation"));
         JLabel medicineLabel = new JLabel("Medicine");
-        medicineButton.addActionListener(e -> {
-            this.character.skillCheck("Medicine");
-        });
+        medicineButton.addActionListener(e -> this.character.skillCheck("Medicine"));
         JLabel natureLabel = new JLabel("Nature");
-        natureButton.addActionListener(e -> {
-            this.character.skillCheck("Nature");
-        });
+        natureButton.addActionListener(e -> this.character.skillCheck("Nature"));
         JLabel perceptionLabel = new JLabel("Perception");
-        perceptionButton.addActionListener(e -> {
-            this.character.skillCheck("Perception");
-        });
+        perceptionButton.addActionListener(e -> this.character.skillCheck("Perception"));
         JLabel performanceLabel = new JLabel("Performance");
-        performanceButton.addActionListener(e -> {
-            this.character.skillCheck("Performance");
-        });
+        performanceButton.addActionListener(e -> this.character.skillCheck("Performance"));
         JLabel persuasionLabel = new JLabel("Persuasion");
-        persuasionButton.addActionListener(e -> {
-            this.character.skillCheck("Persuasion");
-        });
+        persuasionButton.addActionListener(e -> this.character.skillCheck("Persuasion"));
         JLabel religionLabel = new JLabel("Religion");
-        religionButton.addActionListener(e -> {
-            this.character.skillCheck("Religion");
-        });
+        religionButton.addActionListener(e -> this.character.skillCheck("Religion"));
         JLabel sleightOfHandLabel = new JLabel("Sleight of hand");
-        sleightOfHandButton.addActionListener(e -> {
-            this.character.skillCheck("Sleight of hand");
-        });
+        sleightOfHandButton.addActionListener(e -> this.character.skillCheck("Sleight of hand"));
         JLabel stealthLabel = new JLabel("Stealth");
-        stealthButton.addActionListener(e -> {
-            this.character.skillCheck("Stealth");
-        });
+        stealthButton.addActionListener(e -> this.character.skillCheck("Stealth"));
         JLabel survivalLabel = new JLabel("Survival");
-        survivalButton.addActionListener(e -> {
-            this.character.skillCheck("Survival");
-        });
+        survivalButton.addActionListener(e -> this.character.skillCheck("Survival"));
 
         c.gridx = 0;
         skillsPanel.add(acrobaticsLabel, c);
@@ -352,30 +314,22 @@ public class CharacterSheet {
 
         JButton healButton = new JButton("Heal");
         healButton.addActionListener(e -> {
-            try {
                 int healing = 0;
                 while (healing <= 0) {
                     healing = Integer.parseInt(JOptionPane.showInputDialog("Enter the amount of healing:"));
                 }
                 this.character.heal(healing);
                 updateSheet();
-            } catch (Exception exception) {
-
-            }
         });
 
         JButton damageButton = new JButton("Damage");
         damageButton.addActionListener(e -> {
-            try {
                 int damage = 0;
                 while (damage <= 0) {
                     damage = Integer.parseInt(JOptionPane.showInputDialog("Enter the amount of damage:"));
                 }
                 this.character.damage(damage);
                 updateSheet();
-            } catch (Exception exception) {
-
-            }
         });
 
         hitPointsPanel.add(hitPointsNameLabel);
@@ -579,12 +533,8 @@ public class CharacterSheet {
             classLabel.setText(character.getBaseClass().getName());
         }
 
-        if (null != character.getRace().getSubRace()) {
-            raceLabel.setText(character.getRace().getSubRace());
-        } else {
-            raceLabel.setText(character.getRace().getName());
-        }
-
+        raceLabel.setText(character.getSubrace().getSubraceName());
+        backgroundLabel.setText(character.getBackground().getName());
         strengthScoreLabel.setText("" + character.getAttributes().getValue("Strength"));
         dexterityScoreLabel.setText("" + character.getAttributes().getValue("Dexterity"));
         constitutionScoreLabel.setText("" + character.getAttributes().getValue("Constitution"));
@@ -632,14 +582,6 @@ public class CharacterSheet {
         thirdFailure.setSelected(character.getDeathSaveFailures() >= 3);
         armorClassLabel.setText("" + character.getAc());
         initiativeLabel.setText("" + character.getAttributes().getMod("Dexterity"));
-    }
-    public void newCharacter(character.Character character) {
-        this.character = character;
-    }
-    public void getCharacterFromCreator() {
-        this.character = characterCreator.getCharacter();
-        updateSheet();
-        //System.out.print(characterCreator.getCharacter());
     }
 
     public void sendCharacterToSheet(Character newCharacter) {
