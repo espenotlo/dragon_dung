@@ -1,14 +1,11 @@
-package character;
-
-import items.Item;
-import items.ItemDataBase;
+package character.items;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Inventory {
     private final ArrayList<Item> inventory;
-    private final ArrayList<items.Item> equipped;
+    private final ArrayList<character.items.Item> equipped;
     private final ItemDataBase itemDataBase;
 
     public Inventory() {

@@ -1,6 +1,5 @@
-package character;
+package character.attributes;
 
-import static java.lang.Math.floor;
 import static java.lang.Math.round;
 
 public class Attributes {

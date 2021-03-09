@@ -1,6 +1,4 @@
-package spells;
-
-import java.util.Random;
+package character.spells;
 
 public class Spell {
     private String name;

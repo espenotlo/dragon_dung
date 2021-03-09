@@ -1,7 +1,4 @@
-package character;
-
-import feats.Feat;
-import feats.FeatDataBase;
+package character.feats;
 
 import java.util.ArrayList;
 import java.util.Iterator;

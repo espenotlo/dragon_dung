@@ -1,4 +1,4 @@
-package items;
+package character.items;
 
 import java.util.ArrayList;
 import java.util.Iterator;

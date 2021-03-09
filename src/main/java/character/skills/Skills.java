@@ -1,4 +1,4 @@
-package character;
+package character.skills;
 
 import java.util.HashMap;
 

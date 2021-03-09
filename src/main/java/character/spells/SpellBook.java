@@ -1,9 +1,5 @@
-package character;
+package character.spells;
 
-import spells.Spell;
-import spells.SpellDataBase;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 

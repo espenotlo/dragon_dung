@@ -1,4 +1,4 @@
-package feats;
+package character.feats;
 
 import java.util.ArrayList;
 

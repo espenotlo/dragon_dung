@@ -1,8 +1,9 @@
 import backgrounds.BackgroundDataBase;
 import backgrounds.Background;
-import character.Attributes;
-import races.RaceLibrary;
+import character.attributes.Attributes;
+import character.races.RaceLibrary;
 import utilities.DiceRoller;
+import utilities.HintTextField;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -39,12 +40,11 @@ public class CharacterCreator {
 
         JTabbedPane mainPanel = new JTabbedPane();
         frame.getContentPane().add(mainPanel);
-        mainPanel.setBackground(Color.lightGray);
+        //mainPanel.setBackground(Color.lightGray);
         mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         //A text area that will show a description of the currently selected choice.
         JTextArea descriptionArea = new JTextArea();
-        descriptionArea.setBackground(Color.lightGray);
         Dimension descriptionAreaDimension = new Dimension(200, 400);
         descriptionArea.setPreferredSize(descriptionAreaDimension);
         descriptionArea.setEditable(false);
@@ -52,7 +52,6 @@ public class CharacterCreator {
         descriptionArea.setWrapStyleWord(true);
 
         JTextArea featuresDescriptionArea = new JTextArea();
-        featuresDescriptionArea.setBackground(Color.lightGray);
         featuresDescriptionArea.setPreferredSize(new Dimension(200, 200));
         featuresDescriptionArea.setEditable(false);
         featuresDescriptionArea.setLineWrap(true);
@@ -80,7 +79,7 @@ public class CharacterCreator {
             try {
                 descriptionArea.setText(raceLibrary.getSubrace((String) subRaceSelect.getSelectedItem()).getSubraceName() +
                         "\n\n" + raceLibrary.getSubrace((String) subRaceSelect.getSelectedItem()).getSubraceDescription());
-                featuresDescriptionArea.setText(raceLibrary.getSubrace((String) subRaceSelect.getSelectedItem()).getSubraceFeaturesAsString());
+                featuresDescriptionArea.setText(raceLibrary.getSubrace((String) subRaceSelect.getSelectedItem()).getSubraceName() + " features:\n\n" + raceLibrary.getSubrace((String) subRaceSelect.getSelectedItem()).getSubraceFeaturesAsString());
             } catch(NullPointerException exception) {
 
             }
@@ -178,7 +177,7 @@ public class CharacterCreator {
 
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new GridLayout(0,2));
-        inputPanel.setBackground(Color.lightGray);
+
 
         inputPanel.add(nameLabel);
         inputPanel.add(nameTextField);
@@ -196,12 +195,19 @@ public class CharacterCreator {
         JPanel raceClassBackgroundPanel = new JPanel();
         raceClassBackgroundPanel.setLayout(new GridBagLayout());
         raceClassBackgroundPanel.setBorder(new EmptyBorder(10,10,10,10));
-        raceClassBackgroundPanel.setBackground(Color.lightGray);
+        raceClassBackgroundPanel.setBackground(mainPanel.getBackground());
+        descriptionArea.setBackground(raceClassBackgroundPanel.getBackground());
+        featuresDescriptionArea.setBackground(raceClassBackgroundPanel.getBackground());
+        inputPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
+
+
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = GridBagConstraints.RELATIVE;
         c.weightx = 1;
+        c.fill = GridBagConstraints.BOTH;
         raceClassBackgroundPanel.add(inputPanel, c);
+        c.fill = GridBagConstraints.NONE;
         raceClassBackgroundPanel.add(Box.createVerticalStrut(50), c);
         c.fill = GridBagConstraints.BOTH;
         raceClassBackgroundPanel.add(featuresDescriptionArea, c);

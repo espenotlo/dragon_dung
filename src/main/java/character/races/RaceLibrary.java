@@ -1,4 +1,4 @@
-package races;
+package character.races;
 
 import character.Proficiencies;
 
@@ -123,9 +123,9 @@ public class RaceLibrary {
         asi.put("Strength", 0);
         asi.put("Charisma", 0);
 
-        races.put("Human", new Race("Human", "In the reckonings of most worlds, Humans are the youngest of the common races. " +
+        races.put("Human", new Race("Human", "In the reckonings of most worlds, Humans are the youngest of the common character.races. " +
                 "Perhaps it is because of their shorter lives that they strive to achieve as much as they can in the years they are given. " +
-                "Or maybe they feel they have something to prove to the elder races, " +
+                "Or maybe they feel they have something to prove to the elder character.races, " +
                 "and that’s why they build their mighty empires on the foundation of conquest and trade. Whatever drives them, " +
                 "Humans are the innovators, the achievers, and the pioneers of the worlds.",
                 raceFeatures, proficiencies, new HashMap<>(asi), 30, 0));
@@ -156,7 +156,7 @@ public class RaceLibrary {
         this.subraces.add(new Subrace(races.get("Elf"), "High Elf", "As a high elf, you have a keen mind and a mastery of at least the basics of magic. " +
                 "In Faerûn, there are two kinds of high elves. The sun elves are haughty and reclusive, " +
                 "believing themselves to be superior to non-elves and even other elves. The moon elves are more common and more friendly, " +
-                "and often encountered among humans and other races.", subraceFeatures, 0, 0, proficiencies, new HashMap<>(asi)));
+                "and often encountered among humans and other character.races.", subraceFeatures, 0, 0, proficiencies, new HashMap<>(asi)));
         subraceFeatures.clear();
 
         subraceFeatures.put("Ability Score Increase", "+1 Wisdom");
@@ -184,7 +184,7 @@ public class RaceLibrary {
         subraceFeatures.put("Drow Magic", "You know the dancing lights cantrip. When you reach 3rd level, " +
                 "you can cast the faerie fire spell once with this trait and regain the ability to do so when you finish a long rest. " +
                 "When you reach 5th level, you can cast the darkness spell once with this trait and regain the ability to do so when you finish a long rest. " +
-                "Charisma is your spellcasting ability for these spells.");
+                "Charisma is your spellcasting ability for these character.spells.");
         subraceFeatures.put("Drow Weapon Training", "You have proficiency with rapiers, shortswords, and hand crossbows.");
 
         proficiencies.clear();
@@ -216,9 +216,9 @@ public class RaceLibrary {
         asi.put("Charisma", 1);
 
         this.subraces.add(new Subrace(races.get("Human"), "Standard Human", "In the reckonings of most worlds, " +
-                "humans are the youngest of the common races, late to arrive on the world scene and short-lived in comparison to dwarves, " +
+                "humans are the youngest of the common character.races, late to arrive on the world scene and short-lived in comparison to dwarves, " +
                 "elves, and dragons. Perhaps it is because of their shorter lives that they strive to achieve as much as they can in the years they are given. " +
-                "Or maybe they feel they have something to prove to the elder races, and that’s why they build their mighty empires on the foundation of conquest and trade. " +
+                "Or maybe they feel they have something to prove to the elder character.races, and that’s why they build their mighty empires on the foundation of conquest and trade. " +
                 "Whatever drives them, humans are the innovators, the achievers, and the pioneers of the worlds."
                 , subraceFeatures, 0, 0, proficiencies, new HashMap<>(asi)));
 
@@ -290,7 +290,7 @@ public class RaceLibrary {
         asi.put("Charisma", 1);
 
         this.subraces.add(new Subrace(races.get("Halfling"), "Lightfoot Halfling", "Lightfoots are more prone to wanderlust than other halflings, " +
-                "and often dwell alongside other races or take up a nomadic life. In the world of Greyhawk, " +
+                "and often dwell alongside other character.races or take up a nomadic life. In the world of Greyhawk, " +
                 "these halflings are called hairfeet or tallfellows.", subraceFeatures, 0,0, proficiencies, new HashMap<>(asi)));
     }
 

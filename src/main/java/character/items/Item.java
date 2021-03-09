@@ -1,4 +1,4 @@
-package items;
+package character.items;
 
 /** An item that  can be either a piece of weapon, armor or non-equippables. Types to be added: consumables, tools.
  *

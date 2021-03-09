@@ -1,4 +1,4 @@
-package classes;
+package character.classes;
 
 import character.Proficiencies;
 

@@ -1,4 +1,4 @@
-package feats;
+package character.feats;
 
 public class Feat {
     private final String name;

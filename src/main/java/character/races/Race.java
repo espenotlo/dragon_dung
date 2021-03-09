@@ -1,4 +1,4 @@
-package races;
+package character.races;
 
 import character.Proficiencies;
 

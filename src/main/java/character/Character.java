@@ -2,13 +2,18 @@ package character;
 
 import backgrounds.Background;
 import backgrounds.BackgroundDataBase;
-import classes.ClassDataBase;
-import classes.BaseClass;
-import items.Item;
-import races.Race;
-import races.RaceLibrary;
-import races.Subrace;
-import spells.Spell;
+import character.attributes.Attributes;
+import character.skills.Skills;
+import character.classes.ClassDataBase;
+import character.classes.BaseClass;
+import character.feats.Feats;
+import character.items.Inventory;
+import character.items.Item;
+import character.races.Race;
+import character.races.RaceLibrary;
+import character.races.Subrace;
+import character.spells.Spell;
+import character.spells.SpellBook;
 
 import java.util.Iterator;
 import java.util.Random;
